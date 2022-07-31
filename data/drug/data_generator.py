@@ -2,12 +2,13 @@
 # Adapted by TDC.
 
 import os
-
-import torch
-import numpy as np
-import pandas as pd
 import pickle
 from copy import deepcopy
+
+import numpy as np
+import pandas as pd
+import torch
+
 from data.utils import Mode
 
 ID_HELD_OUT = 0.1
@@ -75,6 +76,7 @@ class TdcDtiDgBase(data.Dataset):
     def __init__(self, args):
         super().__init__()
 
+        self.args = args
         self.ENV = [i for i in list(range(2013, 2021))]
         self.num_tasks = 8
         self.input_shape = [(26, 100), (63, 1000)]
@@ -101,6 +103,7 @@ class TdcDtiDgBase(data.Dataset):
 
             self.task_idxs[i][self.mode] = [start_idx, end_idx]
 
+        print(self.task_idxs)
         self.datasets_copy = deepcopy(self.datasets)
 
     def update_historical(self, idx, data_del=False):
@@ -139,7 +142,17 @@ class TdcDtiDg(TdcDtiDgBase):
         super().__init__(args=args)
 
     def __getitem__(self, index):
-        # index = self.index_mapping[self.current_time][self.mode][index]
+        if self.args.difficulty and self.mode == Mode.TRAIN:
+            # Pick a time step from all previous timesteps
+            idx = self.ENV.index(self.current_time)
+            window = np.arange(0, idx + 1)
+            sel_time = self.ENV[np.random.choice(window)]
+            start_idx, end_idx = self.task_idxs[sel_time][self.mode]
+
+            # Pick an example in the time step
+            sel_idx = np.random.choice(np.arange(start_idx, end_idx))
+            index = sel_idx
+
         d = self.datasets[self.current_time][self.mode].iloc[index].Drug_Enc
         t = self.datasets[self.current_time][self.mode].iloc[index].Target_Enc
 

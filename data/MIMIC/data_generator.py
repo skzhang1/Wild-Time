@@ -8,6 +8,7 @@ from torch.utils.data import Dataset
 from data.MIMIC.preprocess import preprocess
 from data.utils import Mode
 
+
 class MIMICBase(Dataset):
     def __init__(self, args):
         super().__init__()
@@ -41,7 +42,8 @@ class MIMICBase(Dataset):
 
         for i in self.ENV:
             end_idx = start_idx + self.datasets[i][self.mode]['labels'].shape[0]
-            self.task_idxs[i] = [start_idx, end_idx]
+            self.task_idxs[i] = {}
+            self.task_idxs[i][self.mode] = [start_idx, end_idx]
             start_idx = end_idx
 
             for classid in range(self.num_classes):
@@ -114,6 +116,17 @@ class MIMIC(MIMICBase):
         super().__init__(args=args)
 
     def __getitem__(self, index):
+        if self.args.difficulty and self.mode == Mode.TRAIN:
+            # Pick a time step from all previous timesteps
+            idx = self.ENV.index(self.current_time)
+            window = np.arange(0, idx + 1)
+            sel_time = self.ENV[np.random.choice(window)]
+            start_idx, end_idx = self.task_idxs[sel_time][self.mode]
+
+            # Pick an example in the time step
+            sel_idx = np.random.choice(np.arange(start_idx, end_idx))
+            index = sel_idx
+
         code = self.datasets[self.current_time][self.mode]['code'][index]
         label = int(self.datasets[self.current_time][self.mode]['labels'][index])
         label_tensor = torch.LongTensor([label])
@@ -142,8 +155,7 @@ class MIMICGroup(MIMICBase):
             # Pick a time step in the sliding window
             window = np.arange(max(0, idx - groupid - self.group_size), idx + 1)
             sel_time = self.ENV[np.random.choice(window)]
-            start_idx = self.task_idxs[sel_time][0]
-            end_idx = self.task_idxs[sel_time][1]
+            start_idx, end_idx = self.task_idxs[sel_time][self.mode]
 
             # Pick an example in the time step
             sel_idx = np.random.choice(np.arange(start_idx, end_idx))

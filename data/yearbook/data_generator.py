@@ -42,7 +42,8 @@ class YearbookBase(Dataset):
 
         for i in self.ENV:
             end_idx = start_idx + len(self.datasets[i][self.mode]['labels'])
-            self.task_idxs[i] = [start_idx, end_idx]
+            self.task_idxs[i] = {}
+            self.task_idxs[i][self.mode] = [start_idx, end_idx]
             start_idx = end_idx
 
             for classid in range(self.num_classes):
@@ -112,8 +113,19 @@ class Yearbook(YearbookBase):
         super().__init__(args=args)
 
     def __getitem__(self, index):
+        if self.args.difficulty and self.mode == Mode.TRAIN:
+            # Pick a time step from all previous timesteps
+            idx = self.ENV.index(self.current_time)
+            window = np.arange(0, idx + 1)
+            sel_time = self.ENV[np.random.choice(window)]
+            start_idx, end_idx = self.task_idxs[sel_time][self.mode]
+
+            # Pick an example in the time step
+            sel_idx = np.random.choice(np.arange(start_idx, end_idx))
+            index = sel_idx
         image = self.datasets[self.current_time][self.mode]['images'][index]
         label = self.datasets[self.current_time][self.mode]['labels'][index]
+
         image_tensor = torch.FloatTensor(image).permute(2, 0, 1)
         label_tensor = torch.LongTensor([label])
 
@@ -141,7 +153,7 @@ class YearbookGroup(YearbookBase):
             # Pick a time step in the sliding window
             window = np.arange(max(0, idx - groupid - self.group_size), idx + 1)
             sel_time = self.ENV[np.random.choice(window)]
-            start_idx, end_idx = self.task_idxs[sel_time]
+            start_idx, end_idx = self.task_idxs[sel_time][self.mode]
 
             # Pick an example in the time step
             sel_idx = np.random.choice(np.arange(start_idx, end_idx))
