@@ -18,8 +18,9 @@ def MIMICPreprocess(data, type):
     ENV = [i for i in list(range(2008, 2020))]
     num_tasks = len(ENV)
 
-    datasets = {}
+    datasets={}
     temp_datasets = {}
+
 
     for i in ENV:
         datasets[i] = {}
@@ -62,7 +63,6 @@ def MIMICPreprocess(data, type):
         print(eachyear, datasets[eachyear][Mode.TRAIN]['labels'].shape, datasets[eachyear][Mode.TEST_ID]['labels'].shape)
 
     with open('./Data/mimic_preprocessed_{}.pkl'.format(type),'wb') as f:
-        print(datasets)
         pickle.dump(datasets, f)
 
 

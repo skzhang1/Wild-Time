@@ -40,8 +40,7 @@ class ArXivBase(Dataset):
         for i, year in enumerate(self.ENV):
             # Store task indices
             end_idx = start_idx + len(self.datasets[year][self.mode]['category'])
-            self.task_idxs[year] = {}
-            self.task_idxs[year][self.mode] = [start_idx, end_idx]
+            self.task_idxs[year] = [start_idx, end_idx]
             start_idx = end_idx
 
             # Store class id list
@@ -119,17 +118,6 @@ class ArXiv(ArXivBase):
         super().__init__(args=args)
 
     def __getitem__(self, index):
-        if self.args.difficulty and self.mode == Mode.TRAIN:
-            # Pick a time step from all previous timesteps
-            idx = self.ENV.index(self.current_time)
-            window = np.arange(0, idx + 1)
-            sel_time = self.ENV[np.random.choice(window)]
-            start_idx, end_idx = self.task_idxs[sel_time][self.mode]
-
-            # Pick an example in the time step
-            sel_idx = np.random.choice(np.arange(start_idx, end_idx))
-            index = sel_idx
-
         title = self.datasets[self.current_time][self.mode]['title'][index]
         category = self.datasets[self.current_time][self.mode]['category'][index]
 
@@ -161,7 +149,8 @@ class ArXivGroup(ArXivBase):
             # Pick a time step in the sliding window
             window = np.arange(max(0, idx - groupid - self.group_size), idx + 1)
             sel_time = self.ENV[np.random.choice(window)]
-            start_idx, end_idx = self.task_idxs[sel_time][self.mode]
+            start_idx = self.task_idxs[sel_time][0]
+            end_idx = self.task_idxs[sel_time][1]
 
             # Pick an example in the time step
             sel_idx = np.random.choice(np.arange(start_idx, end_idx))

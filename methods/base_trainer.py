@@ -95,6 +95,9 @@ class BaseTrainer:
                                            self.cut_mix, self.mix_alpha)
             loss_all.append(loss.item())
 
+            # if step % 200 == 0 and step != 0:
+            #     print(f'step: {step}, loss: {np.mean(loss_all)}')
+
             self.optimizer.zero_grad()
             loss.backward()
             self.optimizer.step()
@@ -211,13 +214,12 @@ class BaseTrainer:
         timesteps = self.train_dataset.ENV
         acc_all = []
         for i, t in enumerate(timesteps):
-            # if t < self.split_time:
-            #     # Collate test ID data from all time steps 1, ..., m
-            #     self.train_dataset.mode = Mode.TEST_ID
-            #     self.train_dataset.update_current_timestamp(t)
-            #     self.train_dataset.update_historical(i + 1, data_del=True)
-            # elif t == self.split_time:
-            if t <= self.split_time:
+            if t < self.split_time:
+                # Collate test ID data from all time steps 1, ..., m
+                self.train_dataset.mode = Mode.TEST_ID
+                self.train_dataset.update_current_timestamp(t)
+                self.train_dataset.update_historical(i + 1, data_del=True)
+            elif t == self.split_time:
                 # Evaluate in-distribution
                 self.train_dataset.mode = Mode.TEST_ID
                 self.train_dataset.update_current_timestamp(t)
@@ -226,7 +228,6 @@ class BaseTrainer:
                                                     num_workers=self.num_workers, collate_fn=self.collate_fn)
                 acc = self.network_evaluation(test_id_dataloader)
                 print('ID accuracy:', acc)
-                acc_all.append(acc)
             else:
                 # Evaluate out-of-distribution
                 self.eval_dataset.mode = Mode.TEST_OOD
@@ -236,6 +237,7 @@ class BaseTrainer:
                                                      num_workers=self.num_workers, collate_fn=self.collate_fn)
                 acc = self.network_evaluation(test_ood_dataloader)
                 print(f'time is {t}, accuracy is {acc}')
+
                 acc_all.append(acc)
 
         print('OOD avg accuracy:', np.mean(acc_all))
@@ -301,14 +303,12 @@ class BaseTrainer:
     def run_offline_task_difficulty(self):
         timesteps = self.train_dataset.ENV
         acc_all = []
-        l = len(timesteps)
+        l=len(timesteps)
 
         for i, t in enumerate(timesteps):
             if i == l-1:
                 self.train_dataset.mode = Mode.TRAIN
                 self.train_dataset.update_current_timestamp(t)
-
-
 
                 train_id_dataloader = InfiniteDataLoader(dataset=self.train_dataset, weights=None,
                                                          batch_size=self.mini_batch_size,
@@ -324,21 +324,19 @@ class BaseTrainer:
                 self.train_dataset.update_current_timestamp(t)
                 self.train_dataset.update_historical(i + 1)
         for i, t in enumerate(timesteps):
-            # if t <= self.split_time:
-            #     continue
-            # else:
-            # Evaluate out-of-distribution
+            if t <= self.split_time:
+                continue
+            else:
+                # Evaluate out-of-distribution
+                self.eval_dataset.mode = Mode.TEST_ID
+                self.eval_dataset.update_current_timestamp(t)
+                test_ood_dataloader = FastDataLoader(dataset=self.eval_dataset,
+                                                    batch_size=self.mini_batch_size,
+                                                    num_workers=self.num_workers, collate_fn=self.collate_fn)
+                acc = self.network_evaluation(test_ood_dataloader)
+                print(f'time is {t}, accuracy is {acc}')
 
-            # Evaluate task difficulty at all timesteps
-            self.eval_dataset.mode = Mode.TEST_ID
-            self.eval_dataset.update_current_timestamp(t)
-            test_ood_dataloader = FastDataLoader(dataset=self.eval_dataset,
-                                                 batch_size=self.mini_batch_size,
-                                                 num_workers=self.num_workers, collate_fn=self.collate_fn)
-            acc = self.network_evaluation(test_ood_dataloader)
-            print(f'time is {t}, accuracy is {acc}')
-
-            acc_all.append(acc)
+                acc_all.append(acc)
 
         print('OOD avg accuracy:', np.mean(acc_all))
         print('OOD worst accuracy:', np.min(acc_all))

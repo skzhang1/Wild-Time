@@ -31,36 +31,21 @@ class MIMICStay:
 
 def get_stay_dict():
     mimic_dict = {}
-    input_path = './data_preprocessed.csv'
-    import csv
-    years = {}
-    with open(input_path, newline='') as csvfile:
-        reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
-        for row in reader:
-            values = row[0].split(',')
-            y = values[4]
-            if y not in years.keys():
-                years[y] = 0
-            years[y] += 1
-    print(years)
-    # input_path = './data/MIMIC/processed/mimic4/data.csv'
-    # fboj = open(input_path)
-    # name_list = fboj.readline().strip().split(',')
-    # for eachline in fboj:
-    #     t=eachline.strip().split(',')
-    #     tempdata={eachname: t[idx] for idx, eachname in enumerate(name_list)}
-    #     mimic_value = MIMICStay(icu_id=tempdata['hadm_id'],
-    #                              icu_timestamp=tempdata['real_admit_year'],
-    #                              mortality=tempdata['mortality'],
-    #                              readmission=tempdata['readmission'],
-    #                              age=tempdata['age'],
-    #                              gender=tempdata['gender'],
-    #                              ethnicity=tempdata['ethnicity'])
-    #     mimic_value.diagnosis = tempdata['diagnoses'].split(' <sep> ')
-    #     mimic_value.treatment = tempdata['procedure'].split(' <sep> ')
-    #     mimic_dict[tempdata['hadm_id']]=mimic_value
-    #
-    # pickle.dump(mimic_dict, open('./Data/mimic_stay_dict.pkl', 'wb'))
+    input_path = './data/MIMIC/processed/mimic4/data.csv'
+    fboj = open(input_path)
+    name_list = fboj.readline().strip().split(',')
+    for eachline in fboj:
+        t=eachline.strip().split(',')
+        tempdata={eachname: t[idx] for idx, eachname in enumerate(name_list)}
+        mimic_value = MIMICStay(icu_id=tempdata['hadm_id'],
+                                 icu_timestamp=tempdata['real_admit_year'],
+                                 mortality=tempdata['mortality'],
+                                 readmission=tempdata['readmission'],
+                                 age=tempdata['age'],
+                                 gender=tempdata['gender'],
+                                 ethnicity=tempdata['ethnicity'])
+        mimic_value.diagnosis = tempdata['diagnoses'].split(' <sep> ')
+        mimic_value.treatment = tempdata['procedure'].split(' <sep> ')
+        mimic_dict[tempdata['hadm_id']]=mimic_value
 
-if __name__ == '__main__':
-    get_stay_dict()
+    pickle.dump(mimic_dict, open('./Data/mimic_stay_dict.pkl', 'wb'))
