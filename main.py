@@ -49,6 +49,7 @@ parser.add_argument('--eval_next_timesteps', default=1, type=int, help='number o
 parser.add_argument('--eval_worst_time', dest='eval_worst_time', action='store_true', help='evaluate worst timestep accuracy')
 parser.add_argument('--load_model', dest='load_model', action='store_true', help='load trained model for evaluation only')
 parser.add_argument('--eval_metric', default='acc', choices=['acc', 'f1', 'rmse'])
+parser.add_argument('--eval_all_timesteps', dest='eval_all_timesteps', action='store_true', help='evaluate at ID and OOD time steps')
 
 # FT
 parser.add_argument('--K', default=1, type=int, help='number of previous timesteps to finetune on')
