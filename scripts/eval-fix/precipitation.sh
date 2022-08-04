@@ -10,6 +10,9 @@ python main.py --dataset=precipitation --method=irm --offline --irm_lambda=1.0 -
 #ERM
 python main.py --dataset=precipitation --method=erm --offline --mini_batch_size=128 --train_update_iter=5000 --lr=0.001 --split_time=7 --random_seed=1 --log_dir=./checkpoints
 
+#Task Difficulty
+python main.py --dataset=precipitation --method=erm --offline --mini_batch_size=128 --train_update_iter=5000 --lr=0.001 --split_time=7 --random_seed=1 --log_dir=./checkpoints --difficulty
+
 #LISA
 python main.py --dataset=precipitation --method=erm --lisa --offline --mix_alpha=2.0 --mini_batch_size=128 --train_update_iter=5000 --lr=0.001 --split_time=7 --random_seed=1 --log_dir=./checkpoints
 

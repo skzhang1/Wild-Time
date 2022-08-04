@@ -10,6 +10,9 @@ python main.py --dataset=arxiv --method=irm --offline --split_time=2016 --irm_la
 #ERM
 python main.py --dataset=arxiv --method=erm --offline --split_time=2016 --mini_batch_size=64 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --eval_next_timesteps=5 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
 
+#Task Difficulty
+python main.py --dataset=arxiv --method=erm --offline --split_time=2016 --mini_batch_size=64 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --eval_next_timesteps=5 --num_workers=8 --random_seed=1 --log_dir=./checkpoints --difficulty
+
 #LISA
 python main.py --dataset=arxiv --method=erm --lisa --offline --split_time=2016 --mix_alpha=2.0 --mini_batch_size=64 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --eval_next_timesteps=5 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
 

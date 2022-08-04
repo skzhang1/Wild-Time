@@ -10,6 +10,9 @@ python main.py --dataset=mimic --method=irm --offline --prediction_type=readmiss
 #ERM
 python main.py --dataset=mimic --method=erm --offline --prediction_type=readmission --mini_batch_size=128 --train_update_iter=3000 --lr=5e-4 --num_workers=0 --random_seed=1 --split_time=2013 --data_dir=./Data --log_dir=./checkpoints/
 
+#Task Difficulty
+python main.py --dataset=mimic --method=erm --offline --prediction_type=readmission --mini_batch_size=128 --train_update_iter=3000 --lr=5e-4 --num_workers=0 --random_seed=1 --split_time=2013 --data_dir=./Data --log_dir=./checkpoints/ --difficulty
+
 #LISA
 python main.py --dataset=mimic --method=erm --offline --lisa --mix_alpha=2.0 --prediction_type=readmission --mini_batch_size=128 --train_update_iter=3000 --lr=5e-4 --num_workers=0 --random_seed=1 --split_time=2013 --data_dir=./Data --log_dir=./checkpoints/
 

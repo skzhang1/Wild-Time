@@ -10,6 +10,9 @@ python main.py --dataset=huffpost --method=irm --offline --irm_lambda=1.0 --irm_
 #ERM
 python main.py --dataset=huffpost --method=erm --offline --mini_batch_size=32 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --split_time=2015 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
 
+#Task Difficulty
+python main.py --dataset=huffpost --method=erm --offline --mini_batch_size=32 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --split_time=2015 --num_workers=8 --random_seed=1 --log_dir=./checkpoints --difficulty
+
 #LISA
 python main.py --dataset=huffpost --method=erm --lisa --offline --mix_alpha=2.0 --mini_batch_size=32 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --split_time=2015 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
 

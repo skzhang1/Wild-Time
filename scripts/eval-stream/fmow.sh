@@ -1,11 +1,11 @@
 #CORAL
-python main.py --dataset=fmow --method=coral --eval_next_timesteps=6 --coral_lambda=0.9 --momentum=0.99 --num_groups=3 --group_size=2 --mini_batch_size=64 --train_update_iter=500 --lr=1e-4 --weight_decay=0.0 --split_time=7 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
+python main.py --dataset=fmow --method=coral --eval_next_timesteps=6 --coral_lambda=0.9 --momentum=0.99 --num_groups=3 --group_size=3 --mini_batch_size=64 --train_update_iter=500 --lr=1e-4 --weight_decay=0.0 --split_time=7 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
 
 #GroupDRO
-python main.py --dataset=fmow --method=groupdro --eval_next_timesteps=6 --num_groups=3 --group_size=2 --mini_batch_size=64 --train_update_iter=500 --lr=1e-4 --split_time=7 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
+python main.py --dataset=fmow --method=groupdro --eval_next_timesteps=6 --num_groups=3 --group_size=3 --mini_batch_size=64 --train_update_iter=500 --lr=1e-4 --split_time=7 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
 
 #IRM
-python main.py --dataset=fmow --method=irm --eval_next_timesteps=6 --irm_lambda=1.0 --irm_penalty_anneal_iters=0 --num_groups=3 --group_size=2 --mini_batch_size=64 --train_update_iter=500 --lr=1e-4 --weight_decay=0.0 --split_time=7 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
+python main.py --dataset=fmow --method=irm --eval_next_timesteps=6 --irm_lambda=1.0 --irm_penalty_anneal_iters=0 --num_groups=3 --group_size=3 --mini_batch_size=64 --train_update_iter=500 --lr=1e-4 --weight_decay=0.0 --split_time=7 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
 
 #ERM
 python main.py --dataset=fmow --method=erm --eval_next_timesteps=6 --mini_batch_size=64 --train_update_iter=500 --lr=1e-4 --weight_decay=0.0 --split_time=7 --num_workers=8 --random_seed=1  --log_dir=./checkpoints

@@ -10,6 +10,9 @@ python main.py --dataset=drug  --method=irm --offline --irm_lambda=1e-3 --irm_pe
 #ERM
 python main.py --dataset=drug --method=erm --offline --lr=5e-5 --mini_batch_size=256 --train_update_iter=5000 --split_time=2016 --random_seed=1 --log_dir=./checkpoints --data_dir=./Data/Drug-BA
 
+#Task Difficulty
+python main.py --dataset=drug --method=erm --offline --lr=5e-5 --mini_batch_size=256 --train_update_iter=5000 --split_time=2016 --random_seed=1 --log_dir=./checkpoints --data_dir=./Data/Drug-BA --difficulty
+
 #A-GEM
 python main.py --dataset=drug --method=agem --buffer_size=1000 --offline --lr=5e-5 --mini_batch_size=256 --train_update_iter=5000--split_time=2016 --random_seed=1 --log_dir=./checkpoints --data_dir=./Data/Drug-BA
 
