@@ -240,7 +240,7 @@ class BaseTrainer:
                 self.eval_dataset.update_current_timestamp(t)
                 self.eval_dataset.update_historical(i + 1, data_del=True)
             elif t == self.split_time:
-                # Evaluate in-distribution
+                # Evaluate on collated in-distribution timesteps
                 self.eval_dataset.mode = Mode.TEST_ID
                 self.eval_dataset.update_current_timestamp(t)
                 test_id_dataloader = FastDataLoader(dataset=self.eval_dataset,
@@ -268,7 +268,7 @@ class BaseTrainer:
         acc_all = []
         for i, t in enumerate(timesteps):
             if t <= self.split_time:
-                # Evaluate in-distribution
+                # Evaluate each ID timestep
                 self.eval_dataset.mode = Mode.TEST_ID
                 self.eval_dataset.update_current_timestamp(t)
                 test_id_dataloader = FastDataLoader(dataset=self.eval_dataset,
@@ -276,7 +276,7 @@ class BaseTrainer:
                                                     num_workers=self.num_workers, collate_fn=self.collate_fn)
                 acc = self.network_evaluation(test_id_dataloader)
             else:
-                # Evaluate out-of-distribution
+                # Evaluate each OOD timestep
                 self.eval_dataset.mode = Mode.TEST_OOD
                 self.eval_dataset.update_current_timestamp(t)
                 test_ood_dataloader = FastDataLoader(dataset=self.eval_dataset,
@@ -299,55 +299,6 @@ class BaseTrainer:
             self.evaluate_offline_all_timesteps()
         else:
             self.evaluate_offline()
-            # timesteps = self.train_dataset.ENV
-            # acc_all = []
-            # for i, t in enumerate(timesteps):
-            #     if t < self.split_time:
-            #         # Collate data from all time steps 1, ..., m-1
-            #         self.train_dataset.mode = Mode.TRAIN
-            #         self.train_dataset.update_current_timestamp(t)
-            #         self.train_dataset.update_historical(i + 1)
-            #         self.train_dataset.mode = Mode.TEST_ID
-            #         self.train_dataset.update_current_timestamp(t)
-            #         self.train_dataset.update_historical(i + 1, data_del=True)
-            #     elif t == self.split_time:
-            #         # Collate data from all time steps 1, ..., m
-            #         self.train_dataset.mode = Mode.TRAIN
-            #         self.train_dataset.update_current_timestamp(t)
-            #
-            #         # Train
-            #         train_id_dataloader = InfiniteDataLoader(dataset=self.train_dataset, weights=None,
-            #                                                 batch_size=self.mini_batch_size,
-            #                                                 num_workers=self.num_workers, collate_fn=self.collate_fn)
-            #         if self.args.load_model:
-            #             self.load_model(t)
-            #         else:
-            #             self.train_step(train_id_dataloader)
-            #             self.save_model(t)
-            #
-            #         # Evaluate in-distribution
-            #         self.train_dataset.mode = Mode.TEST_ID
-            #         self.train_dataset.update_current_timestamp(t)
-            #         test_id_dataloader = FastDataLoader(dataset=self.train_dataset,
-            #                                             batch_size=self.mini_batch_size,
-            #                                             num_workers=self.num_workers, collate_fn=self.collate_fn)
-            #         acc = self.network_evaluation(test_id_dataloader)
-            #         print('ID accuracy:', acc)
-            #     else:
-            #         # Evaluate out-of-distribution
-            #         self.eval_dataset.mode = Mode.TEST_OOD
-            #         self.eval_dataset.update_current_timestamp(t)
-            #         test_ood_dataloader = FastDataLoader(dataset=self.eval_dataset,
-            #                                             batch_size=self.mini_batch_size,
-            #                                             num_workers=self.num_workers, collate_fn=self.collate_fn)
-            #         acc = self.network_evaluation(test_ood_dataloader)
-            #         print(f'time is {t}, accuracy is {acc}')
-            #
-            #         acc_all.append(acc)
-            #
-            # print('OOD avg accuracy:', np.mean(acc_all))
-            # print('OOD worst accuracy:', np.min(acc_all))
-            # print('all OOD accuracies', acc_all)
 
     def run_task_difficulty(self):
         timesteps = self.train_dataset.ENV
