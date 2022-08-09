@@ -1,14 +1,8 @@
-import numpy as np
 import os
-import torch
-import torch.nn.functional as F
 
-from dataloaders import FastDataLoader, InfiniteDataLoader
-from data.utils import Mode
-from methods.utils import prepare_data, forward_pass
-from methods.lisa import lisa
-from methods.groupdro.loss import LossComputer
 from methods.base_trainer import BaseTrainer
+from methods.groupdro.loss import LossComputer
+from methods.utils import prepare_data, forward_pass
 
 
 class GroupDRO(BaseTrainer):

@@ -3,7 +3,7 @@ Adapted from https://github.com/p-lambda/wilds/blob/main/examples/algorithms/IRM
 '''
 
 import os
-import numpy as np
+
 import torch
 
 from dataloaders import InfiniteDataLoader

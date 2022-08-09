@@ -1,9 +1,11 @@
-import ipdb
+import matplotlib.pyplot as plt
 import matplotlib.pyplot as plt
 import torch
 from torch.autograd import Variable
+
 from .lisa import lisa
 from .mixup import mixup_data, mixup_criterion
+
 
 def prepare_data(x, y, dataset_name: str):
     if dataset_name == 'drug':
@@ -21,7 +23,10 @@ def prepare_data(x, y, dataset_name: str):
         if len(y.shape) > 1:
             y = y.squeeze(1).cuda()
     elif dataset_name in ['fmow', 'yearbook']:
-        x = x.cuda()
+        if isinstance(x, tuple):
+            x = (elt.cuda() for elt in x)
+        else:
+            x = x.cuda()
         if len(y.shape) > 1:
             y = y.squeeze(1).cuda()
     return x, y

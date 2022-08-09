@@ -2,11 +2,11 @@
 Adapted from https://github.com/GMvandeVen/continual-learning.
 '''
 
-import numpy as np
 import os
+
 import torch.utils.data
 
-from dataloaders import FastDataLoader, InfiniteDataLoader
+from dataloaders import InfiniteDataLoader
 from methods.base_trainer import BaseTrainer
 from methods.utils import prepare_data, forward_pass
 
@@ -149,7 +149,7 @@ class SI(BaseTrainer):
                 self.train_step(train_dataloader)
                 self.save_model(t)
 
-            avg_acc, worst_acc, best_acc = self.evaluate(i + 1)
+            avg_acc, worst_acc, best_acc = self.evaluate_stream(i + 1)
             self.task_accuracies[t] = avg_acc
             self.worst_time_accuracies[t] = worst_acc
             self.best_time_accuracies[t] = best_acc
