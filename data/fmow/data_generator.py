@@ -9,7 +9,7 @@ from torch.utils.data import Dataset
 from wilds import get_dataset
 
 from data.fmow.preprocess import preprocess
-from data.utils import Mode
+from data.utils import Mode, get_simclr_pipeline_transform
 
 PREPROCESSED_FILE = 'fmow.pkl'
 
@@ -40,6 +40,7 @@ class FMoWBase(Dataset):
         self.ENV = [year for year in range(0, 16)]
         self.resolution = 224
         self.mode = Mode.TRAIN
+        self.ssl_training = False
 
         self.class_id_list = {i: {} for i in range(self.num_classes)}
         self.task_idxs = {}
@@ -137,9 +138,14 @@ class FMoW(FMoWBase):
             idx = sel_idx
 
         image_tensor = self.transform(self.get_input(idx))
-        label = self.datasets[self.current_time][self.mode]['labels'][idx]
+        label_tensor = torch.LongTensor([self.datasets[self.current_time][self.mode]['labels'][idx]])
 
-        return image_tensor, torch.LongTensor([label])
+        if self.args.method == 'simclr' and self.ssl_training:
+            tensor_to_PIL = transforms.ToPILImage()
+            image_tensor = tensor_to_PIL(image_tensor)
+            return image_tensor, label_tensor, ''
+
+        return image_tensor, label_tensor
 
     def __len__(self):
         return len(self.datasets[self.current_time][self.mode]['labels'])

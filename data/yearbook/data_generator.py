@@ -3,9 +3,10 @@ import pickle
 
 import numpy as np
 import torch
+import torchvision.transforms as transforms
 from torch.utils.data import Dataset
 
-from data.utils import Mode
+from data.utils import Mode, get_simclr_pipeline_transform, ContrastiveLearningViewGenerator
 from data.yearbook.preprocess import preprocess
 
 PREPROCESSED_FILE = 'yearbook.pkl'
@@ -28,6 +29,7 @@ class YearbookBase(Dataset):
         self.resolution = 32
         self.mini_batch_size = args.mini_batch_size
         self.mode = Mode.TRAIN
+        self.ssl_training = False
 
         self.ENV = list(sorted(self.datasets.keys()))
         self.num_tasks = len(self.ENV)
@@ -42,7 +44,8 @@ class YearbookBase(Dataset):
 
         for i in self.ENV:
             end_idx = start_idx + len(self.datasets[i][self.mode]['labels'])
-            self.task_idxs[i] = [start_idx, end_idx]
+            self.task_idxs[i] = {}
+            self.task_idxs[i][self.mode] = [start_idx, end_idx]
             start_idx = end_idx
 
             for classid in range(self.num_classes):
@@ -128,6 +131,11 @@ class Yearbook(YearbookBase):
         image_tensor = torch.FloatTensor(image).permute(2, 0, 1)
         label_tensor = torch.LongTensor([label])
 
+        if self.args.method == 'simclr' and self.ssl_training:
+            tensor_to_PIL = transforms.ToPILImage()
+            image_tensor = tensor_to_PIL(image_tensor)
+            return image_tensor, label_tensor, ''
+
         return image_tensor, label_tensor
 
     def __len__(self):
@@ -152,7 +160,7 @@ class YearbookGroup(YearbookBase):
             # Pick a time step in the sliding window
             window = np.arange(max(0, idx - groupid - self.group_size), idx + 1)
             sel_time = self.ENV[np.random.choice(window)]
-            start_idx, end_idx = self.task_idxs[sel_time]
+            start_idx, end_idx = self.task_idxs[sel_time][self.mode]
 
             # Pick an example in the time step
             sel_idx = np.random.choice(np.arange(start_idx, end_idx))
