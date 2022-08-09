@@ -13,18 +13,18 @@ source /iris/u/huaxiu/venvnew/bin/activate
 
 cd ..
 
-python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=1 --split_time=1970 --log_dir=./checkpoints
-python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=2 --split_time=1970 --log_dir=./checkpoints
-python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=3 --split_time=1970 --log_dir=./checkpoints
+python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=1 --split_time=1970
+python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=2 --split_time=1970
+python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=3 --split_time=1970
 
-python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=1 --split_time=1975 --log_dir=./checkpoints
-python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=2 --split_time=1975 --log_dir=./checkpoints
-python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=3 --split_time=1975 --log_dir=./checkpoints
+python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=1 --split_time=1975
+python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=2 --split_time=1975
+python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=3 --split_time=1975
 
-python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=1 --split_time=1980 --log_dir=./checkpoints
-python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=2 --split_time=1980 --log_dir=./checkpoints
-python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=3 --split_time=1980 --log_dir=./checkpoints
+python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=1 --split_time=1980
+python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=2 --split_time=1980
+python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=3 --split_time=1980
 
-python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=1 --log_dir=./checkpoints --difficulty
-python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=2 --log_dir=./checkpoints --difficulty
-python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=3 --log_dir=./checkpoints --difficulty
+python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=1 --difficulty
+python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=2 --difficulty
+python main.py --dataset=yearbook --method=erm --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=3 --difficulty
