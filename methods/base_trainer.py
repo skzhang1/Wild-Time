@@ -72,8 +72,6 @@ class BaseTrainer:
         self.mix_alpha = args.mix_alpha
         self.mini_batch_size = args.mini_batch_size
         self.num_workers = args.num_workers
-        self.test_update_iter = args.test_update_iter
-        self.test_batch_size = args.test_batch_size
         self.base_trainer_str = self.get_base_trainer_str()
 
         # Evaluation and metrics
