@@ -34,11 +34,11 @@ We will release the arXiv version of our paper, along with the final code reposi
 
 First, create the folder `./Data`.
 
-To download the `ArXiv`, `Drug-BA`, `FMoW`, `HuffPost`, `Precipitation`, and `Yearbook` datasets, run the command `python download_datasets.py`.
+To download the ArXiv, Drug-BA, FMoW, HuffPost, Precipitation, and Yearbook datasets, run the command `python download_datasets.py`.
 
 ### Accessing the MIMIC-IV Dataset
 
-Due to patient confidentiality, users must be credentialed on PhysioNet and sign the DUA before downloading the MIMIC-IV dataset.
+Due to patient confidentiality, users must be credentialed on PhysioNet and sign the Data Use Agreement before accessing the MIMIC-IV dataset.
 Here are instructions for how to do so.
 
 1. Obtain 
