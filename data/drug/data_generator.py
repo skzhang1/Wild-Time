@@ -2,15 +2,20 @@
 # Adapted by TDC.
 
 import os
-
-import torch
-import numpy as np
-import pandas as pd
 import pickle
 from copy import deepcopy
+
+import numpy as np
+import pandas as pd
+import torch
+from sklearn.preprocessing import OneHotEncoder
+from torch.utils import data
+
+from data.drug.preprocess import preprocess
 from data.utils import Mode
 
 ID_HELD_OUT = 0.1
+
 
 def get_dataset_class(dataset_name):
     """Return the dataset class with the given name."""
@@ -34,8 +39,6 @@ smiles_char = ['?', '#', '%', ')', '(', '+', '-', '.', '1', '0', '3', '2', '5', 
 
 MAX_SEQ_PROTEIN = 1000
 MAX_SEQ_DRUG = 100
-
-from sklearn.preprocessing import OneHotEncoder
 
 enc_protein = OneHotEncoder().fit(np.array(amino_char).reshape(-1, 1))
 enc_drug = OneHotEncoder().fit(np.array(smiles_char).reshape(-1, 1))
@@ -69,12 +72,18 @@ def trans_drug(x):
     return temp
 
 
-from torch.utils import data
-
 class TdcDtiDgBase(data.Dataset):
     def __init__(self, args):
         super().__init__()
 
+        preprocess(args)
+        if args.reduced_train_prop is None:
+            self.data_file = f'{str(self)}_preprocessed.pkl'
+        else:
+            self.data_file = f'{str(self)}__preprocessed_{args.reduced_train_prop}.pkl'
+        self.datasets = pickle.load(open(os.path.join(args.data_dir, self.data_file), 'rb'))
+
+        self.args = args
         self.ENV = [i for i in list(range(2013, 2021))]
         self.num_tasks = 8
         self.input_shape = [(26, 100), (63, 1000)]
@@ -83,12 +92,8 @@ class TdcDtiDgBase(data.Dataset):
         self.mode = Mode.TRAIN
 
         self.task_idxs = {}
-        self.datasets = pickle.load(open(os.path.join(args.data_dir,'drug_preprocessed.pkl'), 'rb'))
         start_idx = 0
         end_idx = 0
-
-        if args.data_dir is None:
-            raise ValueError('Data directory not specified!')
 
         for i in self.ENV:
             if i != 2019:
@@ -98,7 +103,6 @@ class TdcDtiDgBase(data.Dataset):
                 start_idx = 0
                 end_idx = len(self.datasets[i][self.mode])
             self.task_idxs[i]={}
-
             self.task_idxs[i][self.mode] = [start_idx, end_idx]
 
         self.datasets_copy = deepcopy(self.datasets)
@@ -108,7 +112,6 @@ class TdcDtiDgBase(data.Dataset):
         prev_time = self.ENV[idx - 1]
         self.datasets[time][self.mode] = pd.concat([self.datasets[time][self.mode], self.datasets[prev_time][self.mode]])
         self.datasets[time][self.mode].reset_index()
-        # self.index_mapping[time][self.mode] = {idx: value for idx, value in enumerate(self.datasets[time][self.mode].index.values)}
         if data_del:
             del self.datasets[time - 1]
 
@@ -133,6 +136,7 @@ class TdcDtiDgBase(data.Dataset):
 
     def __str__(self):
         return 'drug'
+
 
 class TdcDtiDg(TdcDtiDgBase):
     def __init__(self, args):
@@ -162,6 +166,7 @@ class TdcDtiDg(TdcDtiDgBase):
     def __len__(self):
         return len(self.datasets[self.current_time][self.mode])
 
+
 class TdcDtiDgGroup(TdcDtiDgBase):
     def __init__(self, args):
         super().__init__(args=args)
@@ -177,7 +182,13 @@ class TdcDtiDgGroup(TdcDtiDgBase):
             np.random.seed(index)
             # Select group ID
             idx = self.ENV.index(self.current_time)
-            groupid = np.random.choice([i for i in range(max(1, idx - self.group_size + 1))])
+            if self.args.non_overlapping:
+                possible_groupids = [i for i in range(0, max(1, idx - self.group_size + 1), self.group_size)]
+                if len(possible_groupids) == 0:
+                    possible_groupids = [np.random.randint(self.group_size)]
+            else:
+                possible_groupids = [i for i in range(max(1, idx - self.group_size + 1))]
+            groupid = np.random.choice(possible_groupids)
 
             # Pick a time step in the sliding window
             window = np.arange(max(0, idx - groupid - self.group_size), idx + 1)

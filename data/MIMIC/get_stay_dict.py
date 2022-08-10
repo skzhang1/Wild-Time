@@ -2,7 +2,36 @@
 Reference: https://github.com/Google-Health/records-research/tree/master/graph-convolutional-transformer
 """
 
+import os
+import sys
+import csv
+import json
+from datetime import datetime, timedelta
+from collections import Counter, OrderedDict
+import random
+import pandas as pd
+import numpy as np
+from itertools import chain
+import tqdm
 import pickle
+
+
+def set_seed(seed):
+    random.seed(seed)
+    np.random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+
+set_seed(seed=42)
+
+def process_patients(data_path):
+    patients = pd.read_csv(os.path.join(data_path, 'raw/mimic4/patients.csv'))
+
+def get_mimic_data():
+
+
+
+
+
 
 class MIMICStay:
 

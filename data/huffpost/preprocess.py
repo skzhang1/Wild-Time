@@ -9,10 +9,41 @@ RAW_DATA_FILE = 'News_Category_Dataset_v2.json'
 ID_HELD_OUT = 0.1
 
 '''
-{'BLACK VOICES': 0, 'BUSINESS': 1, 'COMEDY': 2, 'CRIME': 3, 'ENTERTAINMENT': 4, 'IMPACT': 5, 'QUEER VOICES': 6, 'SCIENCE': 7, 'SPORTS': 8, 'TECH': 9, 'TRAVEL': 10}
+News Categories to IDs:
+    {'BLACK VOICES': 0, 'BUSINESS': 1, 'COMEDY': 2, 'CRIME': 3, 
+    'ENTERTAINMENT': 4, 'IMPACT': 5, 'QUEER VOICES': 6, 'SCIENCE': 7, 
+    'SPORTS': 8, 'TECH': 9, 'TRAVEL': 10}
 '''
 
-def preprocess(args):
+def preprocess_reduced_train_set(args):
+    print(f'Preprocessing reduced train proportion dataset and saving to huffpost_{args.reduced_train_prop}.pkl')
+    np.random.seed(0)
+
+    orig_data_file = os.path.join(args.data_dir, f'huffpost.pkl')
+    dataset = pickle.load(open(orig_data_file, 'rb'))
+    years = list(sorted(dataset.keys()))
+    train_fraction = args.reduced_train_prop / (1 - ID_HELD_OUT)
+
+    for year in years:
+        train_headlines = dataset[year][Mode.TRAIN]['headline']
+        train_categories = dataset[year][Mode.TRAIN]['category']
+
+        num_train_samples = len(train_categories)
+        reduced_num_train_samples = int(train_fraction * num_train_samples)
+        idxs = np.random.permutation(np.arange(num_train_samples))
+        train_idxs = idxs[:reduced_num_train_samples].astype(int)
+
+        new_train_headlines = np.array(train_headlines)[train_idxs]
+        new_train_categories = np.array(train_categories)[train_idxs]
+        dataset[year][Mode.TRAIN]['title'] = np.stack(new_train_headlines, axis=0)
+        dataset[year][Mode.TRAIN]['category'] = np.array(new_train_categories)
+
+    preprocessed_data_file = os.path.join(args.data_dir, f'huffpost_{args.reduced_train_prop}.pkl')
+    pickle.dump(dataset, open(preprocessed_data_file, 'wb'))
+    np.random.seed(args.random_seed)
+
+
+def preprocess_orig(args):
     raw_data_path = os.path.join(args.data_dir, RAW_DATA_FILE)
     if not os.path.isfile(raw_data_path):
         raise ValueError(f'{RAW_DATA_FILE} is not in the data directory {args.data_dir}!')
@@ -78,3 +109,13 @@ def preprocess(args):
 
     preprocessed_data_path = os.path.join(args.data_dir, 'huffpost.pkl')
     pickle.dump(dataset, open(preprocessed_data_path, 'wb'))
+
+
+def preprocess(args):
+    np.random.seed(0)
+    if not os.path.isfile(os.path.join(args.data_dir, 'huffpost.pkl')):
+        preprocess_orig(args)
+    if args.reduced_train_prop is not None:
+        if not os.path.isfile(os.path.join(args.data_dir, f'huffpost_{args.reduced_train_prop}.pkl')):
+            preprocess_reduced_train_set(args)
+    np.random.seed(args.random_seed)

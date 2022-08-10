@@ -57,13 +57,12 @@ class PrecipitationBase(Dataset):
     def __init__(self, args):
         super().__init__()
 
-        if args.data_dir is None:
-            raise ValueError('Data directory not specified!')
-        self.data_file = os.path.join(args.data_dir, PREPROCESSED_FILE)
-        if not os.path.isfile(self.data_file):
-            print(f'Preprocessing data and saving to {self.data_file}')
-            preprocess(args)
-        self.datasets = pickle.load(open(self.data_file, 'rb'))
+        preprocess(args)
+        if args.reduced_train_prop is None:
+            self.data_file = f'{str(self)}.pkl'
+        else:
+            self.data_file = f'{str(self)}_{args.reduced_train_prop}.pkl'
+        self.datasets = pickle.load(open(os.path.join(args.data_dir, self.data_file), 'rb'))
 
         self.args = args
         self.num_classes = 9
@@ -220,7 +219,13 @@ class PrecipitationGroup(PrecipitationBase):
             np.random.seed(index)
             # Select group ID
             idx = self.ENV.index(self.current_time)
-            groupid = np.random.choice([i for i in range(max(1, idx - self.group_size + 1))])
+            if self.args.non_overlapping:
+                possible_groupids = [i for i in range(0, max(1, idx - self.group_size + 1), self.group_size)]
+                if len(possible_groupids) == 0:
+                    possible_groupids = [np.random.randint(self.group_size)]
+            else:
+                possible_groupids = [i for i in range(max(1, idx - self.group_size + 1))]
+            groupid = np.random.choice(possible_groupids)
 
             # Pick a time step in the sliding window
             window = np.arange(max(0, idx - groupid - self.group_size), idx + 1)
