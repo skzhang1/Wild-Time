@@ -21,29 +21,42 @@ We will release the arXiv version of our paper, along with the final code reposi
 
 ## Prerequisites
 
-- huggingface-hub 0.5.1
-- pytorch-tabular 0.7.0
-- pytorch-transformers 1.2.0
-- pandas 1.4.2
-- PyTDC 0.3.6
-- pytorch-lightning 1.5.9
-- pytorch 1.11.0
-- numpy 
+- numpy=1.19.1
+- pytorch=1.11.0
+- pytorch-tabula=0.7.0
+- pytorch-transformers=1.2.0
+- pytorch-lightning=1.5.9
+- pandas=1.4.2
+- huggingface-hub=0.5.1
+- PyTDC=0.3.6
 
-## Datasets
+## Downloading the Wild-Time Datasets
 
-- MIMIC-IV
-  - Follow the instructions in `../src/data/mimic/get_mimic_table.ipynb` to download the datasets and get `data_preprocessed.csv`
-  - Run `../src/data/mimic/preprocess.py` to get `mimic_preprocessed_readmission.pkl` and `mimic_preprocessed_mortality.pkl`
+First, create the folder `./Data`.
 
-- All other datasets (Yearbook, arXiv, Huffpost, Drug-BA, Weather-Pcpn):
-  - Download the data from [Google Drive](https://drive.google.com/drive/folders/178Os-zwyJ7yL7aBxcR7Il5_0wwiYYqGl?usp=sharing) into the folder `./Data`
+To download the `ArXiv`, `Drug-BA`, `FMoW`, `HuffPost`, `Precipitation`, and `Yearbook` datasets, run the command `python download_datasets.py`.
+
+### Accessing the MIMIC-IV Dataset
+
+Due to patient confidentiality, users must be credentialed on PhysioNet and sign the DUA before downloading the MIMIC-IV dataset.
+Here are instructions for how to do so.
+
+1. Obtain 
+  - INSTRUCTIONS [TO DO: ADD THIS]
+2. 
+3. Go to https://physionet.org/content/mimiciv/1.0/ and download the following CSV files from the "core" and "hosp" modules to `./Data:
+    - patients.csv
+    - admissions.csv
+    - diagnoses_icd.csv
+    - procedures_icd.csv
+   Decompress the files and put them under `./Data/raw/mimic4`
+4. Run the command `python ../src/data/mimic/preprocess.py` to get `mimic_preprocessed_readmission.pkl` and `mimic_preprocessed_mortality.pkl`.
 
 ## Scripts
 
-- Create the folders `./Data`, `./checkpoints`, and `./results`.
+- Create the folders `./checkpoints`, and `./results`.
 - To run baselines, refer to the corresponding scripts in the `scripts/` folder.
 
-## Acknowledgement
+## Acknowledgements
 
 We thank the authors of all baselines. Most of our implementations follow the corresponding original released versions. We gratefully acknowledge the help of Zhenbang Wu in the preprocessing of MIMIC-IV dataset.
