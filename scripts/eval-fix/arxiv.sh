@@ -16,6 +16,9 @@ python main.py --dataset=arxiv --method=erm --offline --split_time=2016 --mini_b
 #LISA
 python main.py --dataset=arxiv --method=erm --lisa --offline --split_time=2016 --mix_alpha=2.0 --mini_batch_size=64 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
 
+#Mixup
+python main.py --dataset=arxiv --method=erm --mixup --offline --split_time=2016 --mix_alpha=2.0 --mini_batch_size=64 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
+
 #A-GEM
 python main.py --dataset=arxiv --method=agem --buffer_size=1000 --mini_batch_size=64 --train_update_iter=1000 --lr=2e-5 --weight_decay=0.01 --offline --split_time=2016 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
 

@@ -16,6 +16,9 @@ python main.py --dataset=fmow --method=erm --offline --mini_batch_size=64 --trai
 #LISA
 python main.py --dataset=fmow --method=erm --lisa --offline --mini_batch_size=64 --train_update_iter=3000 --lr=1e-4 --weight_decay=0.0 --split_time=10 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
 
+#Mixup
+python main.py --dataset=fmow --method=erm --mixup --offline --mini_batch_size=64 --train_update_iter=3000 --lr=1e-4 --weight_decay=0.0 --split_time=10 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
+
 #A-GEM
 python main.py --dataset=fmow --method=agem --buffer_size=1000 --mini_batch_size=64 --train_update_iter=500 --lr=1e-4 --weight_decay=0.0 --offline --split_time=10 --random_seed=1 --log_dir=./checkpoints
 

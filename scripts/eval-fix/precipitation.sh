@@ -16,6 +16,9 @@ python main.py --dataset=precipitation --method=erm --offline --mini_batch_size=
 #LISA
 python main.py --dataset=precipitation --method=erm --lisa --offline --mix_alpha=2.0 --mini_batch_size=128 --train_update_iter=5000 --lr=0.001 --split_time=7 --random_seed=1 --log_dir=./checkpoints
 
+#Mixup
+python main.py --dataset=precipitation --method=erm --mixup --offline --mix_alpha=2.0 --mini_batch_size=128 --train_update_iter=5000 --lr=0.001 --split_time=7 --random_seed=1 --log_dir=./checkpoints
+
 #A-GEM
 python main.py --dataset=precipitation --method=agem --buffer_size=1000 --offline --mini_batch_size=128 --train_update_iter=5000 --lr=0.001 --split_time=7 --random_seed=1 --log_dir=./checkpoints
 
