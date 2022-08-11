@@ -33,6 +33,10 @@ python main.py --dataset=mimic --method=erm --offline --lisa --mix_alpha=2.0 --p
 python main.py --dataset=mimic --method=erm --offline --lisa --mix_alpha=2.0 --prediction_type=readmission --mini_batch_size=128 --train_update_iter=3000 --lr=5e-4 --num_workers=0 --split_time=2013 --random_seed=2 --reduced_train_prop=0.3
 python main.py --dataset=mimic --method=erm --offline --lisa --mix_alpha=2.0 --prediction_type=readmission --mini_batch_size=128 --train_update_iter=3000 --lr=5e-4 --num_workers=0 --split_time=2013 --random_seed=3 --reduced_train_prop=0.3
 
+python main.py --dataset=mimic --method=erm --offline --mixup --mix_alpha=2.0 --prediction_type=readmission --mini_batch_size=128 --train_update_iter=3000 --lr=5e-4 --num_workers=0 --split_time=2013 --random_seed=1 --reduced_train_prop=0.3
+python main.py --dataset=mimic --method=erm --offline --mixup --mix_alpha=2.0 --prediction_type=readmission --mini_batch_size=128 --train_update_iter=3000 --lr=5e-4 --num_workers=0 --split_time=2013 --random_seed=2 --reduced_train_prop=0.3
+python main.py --dataset=mimic --method=erm --offline --mixup --mix_alpha=2.0 --prediction_type=readmission --mini_batch_size=128 --train_update_iter=3000 --lr=5e-4 --num_workers=0 --split_time=2013 --random_seed=3 --reduced_train_prop=0.3
+
 python main.py --dataset=mimic --prediction_type=readmission --method=agem --buffer_size=1000 --mini_batch_size=128 --train_update_iter=3000 --lr=1e-1 --offline --num_workers=0 --split_time=2013 --random_seed=1 --reduced_train_prop=0.3
 python main.py --dataset=mimic --prediction_type=readmission --method=agem --buffer_size=1000 --mini_batch_size=128 --train_update_iter=3000 --lr=1e-1 --offline --num_workers=0 --split_time=2013 --random_seed=2 --reduced_train_prop=0.3
 python main.py --dataset=mimic --prediction_type=readmission --method=agem --buffer_size=1000 --mini_batch_size=128 --train_update_iter=3000 --lr=1e-1 --offline --num_workers=0 --split_time=2013 --random_seed=3 --reduced_train_prop=0.3

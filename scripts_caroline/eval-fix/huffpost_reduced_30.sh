@@ -33,6 +33,10 @@ python main.py --dataset=huffpost --method=erm --lisa --offline --mix_alpha=2.0 
 python main.py --dataset=huffpost --method=erm --lisa --offline --mix_alpha=2.0 --mini_batch_size=32 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --split_time=2015 --num_workers=8 --random_seed=2 --reduced_train_prop=0.3
 python main.py --dataset=huffpost --method=erm --lisa --offline --mix_alpha=2.0 --mini_batch_size=32 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --split_time=2015 --num_workers=8 --random_seed=3 --reduced_train_prop=0.3
 
+python main.py --dataset=huffpost --method=erm --mixup --offline --mix_alpha=2.0 --mini_batch_size=32 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --split_time=2015 --num_workers=8 --random_seed=1 --reduced_train_prop=0.3
+python main.py --dataset=huffpost --method=erm --mixup --offline --mix_alpha=2.0 --mini_batch_size=32 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --split_time=2015 --num_workers=8 --random_seed=2 --reduced_train_prop=0.3
+python main.py --dataset=huffpost --method=erm --mixup --offline --mix_alpha=2.0 --mini_batch_size=32 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --split_time=2015 --num_workers=8 --random_seed=3 --reduced_train_prop=0.3
+
 python main.py --dataset=huffpost --method=agem --buffer_size=1000 --mini_batch_size=16 --train_update_iter=1000 --lr=2e-5 --weight_decay=0.01 --offline --split_time=2015 --random_seed=1 --reduced_train_prop=0.3
 python main.py --dataset=huffpost --method=agem --buffer_size=1000 --mini_batch_size=16 --train_update_iter=1000 --lr=2e-5 --weight_decay=0.01 --offline --split_time=2015 --random_seed=2 --reduced_train_prop=0.3
 python main.py --dataset=huffpost --method=agem --buffer_size=1000 --mini_batch_size=16 --train_update_iter=1000 --lr=2e-5 --weight_decay=0.01 --offline --split_time=2015 --random_seed=3 --reduced_train_prop=0.3

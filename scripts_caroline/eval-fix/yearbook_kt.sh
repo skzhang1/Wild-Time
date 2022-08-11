@@ -21,9 +21,9 @@ python main.py --dataset=yearbook --method=groupdro --num_groups=7 --group_size=
 python main.py --dataset=yearbook --method=groupdro --num_groups=7 --group_size=4 --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=2 --split_time=1970
 python main.py --dataset=yearbook --method=groupdro --num_groups=7 --group_size=4 --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=3 --split_time=1970
 
-python main.py --dataset=yearbook --method=irm --irm_lambda=1.0 --irm_penalty_anneal_iters=0 --num_groups=5 --group_size=3 --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=1 --split_time=1970
-python main.py --dataset=yearbook --method=irm --irm_lambda=1.0 --irm_penalty_anneal_iters=0 --num_groups=5 --group_size=3 --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=2 --split_time=1970
-python main.py --dataset=yearbook --method=irm --irm_lambda=1.0 --irm_penalty_anneal_iters=0 --num_groups=5 --group_size=3 --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=3 --split_time=1970
+python main.py --dataset=yearbook --method=irm --irm_lambda=1.0 --irm_penalty_anneal_iters=0 --num_groups=7 --group_size=4 --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=1 --split_time=1970
+python main.py --dataset=yearbook --method=irm --irm_lambda=1.0 --irm_penalty_anneal_iters=0 --num_groups=7 --group_size=4 --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=2 --split_time=1970
+python main.py --dataset=yearbook --method=irm --irm_lambda=1.0 --irm_penalty_anneal_iters=0 --num_groups=7 --group_size=4 --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=3 --split_time=1970
 
 python main.py --dataset=yearbook --method=coral --coral_lambda=0.9 --momentum=0.99 --num_groups=5 --group_size=3 --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=1 --split_time=1970
 python main.py --dataset=yearbook --method=coral --coral_lambda=0.9 --momentum=0.99 --num_groups=5 --group_size=3 --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --random_seed=2 --split_time=1970

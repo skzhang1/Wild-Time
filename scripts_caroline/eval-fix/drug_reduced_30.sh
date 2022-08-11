@@ -29,6 +29,10 @@ python main.py --dataset=drug --method=erm --offline --lr=5e-5 --mini_batch_size
 python main.py --dataset=drug --method=erm --offline --lr=5e-5 --mini_batch_size=256 --train_update_iter=5000 --split_time=2016 --data_dir=./Data/Drug-BA --random_seed=2
 python main.py --dataset=drug --method=erm --offline --lr=5e-5 --mini_batch_size=256 --train_update_iter=5000 --split_time=2016 --data_dir=./Data/Drug-BA --random_seed=3
 
+python main.py --dataset=drug --method=erm --mixup --mix_alpha=2.0 --offline --lr=5e-5 --mini_batch_size=256 --train_update_iter=5000 --split_time=2016 --data_dir=./Data/Drug-BA --random_seed=1
+python main.py --dataset=drug --method=erm --mixup --mix_alpha=2.0 --offline --lr=5e-5 --mini_batch_size=256 --train_update_iter=5000 --split_time=2016 --data_dir=./Data/Drug-BA --random_seed=2
+python main.py --dataset=drug --method=erm --mixup --mix_alpha=2.0 --offline --lr=5e-5 --mini_batch_size=256 --train_update_iter=5000 --split_time=2016 --data_dir=./Data/Drug-BA --random_seed=3
+
 python main.py --dataset=drug --method=agem --buffer_size=1000 --offline --lr=5e-5 --mini_batch_size=256 --train_update_iter=5000--split_time=2016 --data_dir=./Data/Drug-BA --random_seed=1
 python main.py --dataset=drug --method=agem --buffer_size=1000 --offline --lr=5e-5 --mini_batch_size=256 --train_update_iter=5000--split_time=2016 --data_dir=./Data/Drug-BA --random_seed=2
 python main.py --dataset=drug --method=agem --buffer_size=1000 --offline --lr=5e-5 --mini_batch_size=256 --train_update_iter=5000--split_time=2016 --data_dir=./Data/Drug-BA --random_seed=3
