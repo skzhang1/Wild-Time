@@ -14,9 +14,9 @@ class MIMICBase(Dataset):
 
         preprocess(args)
         if args.reduced_train_prop is None:
-            self.data_file = f'{str(self)}.pkl'
+            self.data_file = f'{str(self)}_preprocessed_{args.prediction_type}.pkl'
         else:
-            self.data_file = f'{str(self)}_{args.reduced_train_prop}.pkl'
+            self.data_file = f'{str(self)}_preprocessed_{args.prediction_type}_{args.reduced_train_prop}.pkl'
         self.datasets = pickle.load(open(os.path.join(args.data_dir, self.data_file), 'rb'))
 
         self.args = args
