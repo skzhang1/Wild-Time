@@ -79,7 +79,7 @@ class IRM(BaseTrainer):
                 self.train_dataset.update_current_timestamp(t)
                 self.train_dataset.train = True
                 time_dataloader = InfiniteDataLoader(dataset=self.train_dataset, weights=None, batch_size=self.mini_batch_size,
-                                                 num_workers=self.num_workers, collate_fn=self.collate_fn)
+                                                 num_workers=self.num_workers, collate_fn=self.train_collate_fn)
                 self.train_step(time_dataloader)
                 self.save_model(t)
                 self.train_dataset.update_historical(i + 1)

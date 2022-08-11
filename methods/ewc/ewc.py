@@ -74,7 +74,7 @@ class EWC(BaseTrainer):
 
         # Create data-loader to give batches of size 1
         # This samples the current time step
-        data_loader = get_data_loader(self.train_dataset, batch_size=self.mini_batch_size, collate_fn=self.collate_fn)
+        data_loader = get_data_loader(self.train_dataset, batch_size=self.mini_batch_size, collate_fn=self.train_collate_fn)
 
         # Estimate the FI-matrix for [self.fisher_n] batches of size 1
         ind = 0
