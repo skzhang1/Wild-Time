@@ -1,6 +1,3 @@
-# Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
-# Adapted by TDC.
-
 import os
 import pickle
 
@@ -86,7 +83,7 @@ def preprocess_MIMIC(data, type):
         pickle.dump(datasets, f)
 
 
-def preprocess_orig(args):
+def preprocess_orig():
     if not os.path.exists('./Data/mimic_stay_dict.pkl'):
         get_stay_dict()
     data = pickle.load(open('./Data/mimic_stay_dict.pkl', 'rb'))
@@ -97,7 +94,7 @@ def preprocess_orig(args):
 def preprocess(args):
     np.random.seed(0)
     if not os.path.isfile(os.path.join(args.data_dir, f'mimic_preprocessed_{args.prediction_type}.pkl')):
-        preprocess_orig(args)
+        preprocess_orig()
     if args.reduced_train_prop is not None:
         if not os.path.isfile(os.path.join(args.data_dir, f'mimic_preprocessed_{args.prediction_type}_{args.reduced_train_prop}.pkl')):
             preprocess_reduced_train_set(args)
