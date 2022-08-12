@@ -29,7 +29,7 @@ To download the Wild-Time datasets and run baselines, please clone this repo to 
 git clone git@github.com:huaxiuyao/Wild-Time.git
 cd Wild-Time
 ```
-In the directory `Wild-Time`, create the folders `Data`, `./checkpoints`, and `./results`.
+In the directory `Wild-Time`, create the folders `Data`, `checkpoints`, and `results`.
 
 ### Requirements
 
@@ -44,9 +44,9 @@ In the directory `Wild-Time`, create the folders `Data`, `./checkpoints`, and `.
 
 ### Downloading the Wild-Time datasets
 
-Create the folder `./Data`.
+Create the folder `Wild-Time/Data`.
 
-To download the ArXiv, Drug-BA, FMoW, HuffPost, Precipitation, and Yearbook datasets, run the command `python download_datasets.py`. To download the MIMIC dataset, please refer to the next section.
+To download the ArXiv, Drug-BA, FMoW, HuffPost, Precipitation, and Yearbook datasets, run the command `python download_datasets.py`. To download the MIMIC dataset, please read the next section.
 
 ### Accessing the MIMIC-IV dataset
 
@@ -88,9 +88,8 @@ python main.py --dataset=[DATASET] --method=[BASELINE] --lr=[LEARNING RATE] --tr
 - Specify the weight of the CORAL loss with `--coral_lambda` (default: 1.0).
 - Add `--non_overlapping` to sample from non-overlapping time windows.
 
-Sample command:
+Example command:
 ```
-# CORAL (Eval-Fix)
 python main.py --dataset=arxiv --method=coral --offline --split_time=2016 --coral_lambda=0.9 --num_groups=4 --group_size=4 --mini_batch_size=64 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
 ```
 
@@ -98,10 +97,9 @@ python main.py --dataset=arxiv --method=coral --offline --split_time=2016 --cora
 - Set the number of groups (e.g., number of time windows) with `--num_groups`.
 - Set the group size (e.g., length of each time window) with `--group_size`.
 - Add `--non_overlapping` to sample from non-overlapping time windows.
-```
 
-Sample command:
-# GroupDRO (Eval-Fix)
+Example command:
+```
 python main.py --dataset=drug --method=groupdro --offline --split_time=2016 --num_groups=3 --group_size=2 --mini_batch_size=256 --train_update_iter=5000 --lr=2e-5 --random_seed=1 --log_dir=./checkpoints --data_dir=./Data/Drug-BA
 ```
 
@@ -111,14 +109,14 @@ python main.py --dataset=drug --method=groupdro --offline --split_time=2016 --nu
 - Specify the weight of the IRM penalty loss with `--irm_lambda` (default: 1.0)
 - Specify the number of iterations after which to anneal the IRM penalty loss wtih `--irm_penalty_anneal_iters` (default: 0).
 
-Sample command:
+Example command:
 ```
 python main.py --dataset=fmow --method=irm --offline --irm_lambda=1.0 --irm_penalty_anneal_iters=0 --num_groups=3 --group_size=3 --mini_batch_size=64 --train_update_iter=3000 --lr=1e-4 --weight_decay=0.0 --split_time=10 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
 ```
 
 ### ERM
 
-Sample command:
+Example command:
 ```
 python main.py --dataset=huffpost --method=erm --offline --mini_batch_size=32 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --split_time=2015 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
 ```
@@ -127,7 +125,7 @@ python main.py --dataset=huffpost --method=erm --offline --mini_batch_size=32 --
 ### LISA
 - Set the mix alpha weight with `--mix_alpha` (default: 2.0).
 
-Sample command:
+Example command:
 ```
 python main.py --dataset=mimic --method=erm --offline --lisa --mix_alpha=2.0 --prediction_type=mortality --mini_batch_size=128 --train_update_iter=3000 --lr=5e-4 --num_workers=0 --random_seed=1 --split_time=2013 --data_dir=./Data --log_dir=./checkpoints/
 ```
@@ -135,20 +133,20 @@ python main.py --dataset=mimic --method=erm --offline --lisa --mix_alpha=2.0 --p
 ### Mixup
 - Set the mix alpha weight with `--mix_alpha` (default: 2.0).
 
-Sample command:
+Example command:
 ```
 python main.py --dataset=mimic --method=erm --offline --mixup --mix_alpha=2.0 --prediction_type=readmission --mini_batch_size=128 --train_update_iter=3000 --lr=5e-4 --num_workers=0 --random_seed=1 --split_time=2013 --data_dir=./Data --log_dir=./checkpoints/
 ```
 
-### A-GEM
+### Averaged Gradient Episodic Memory (A-GEM)
 - Set the buffer size with `--buffer_size` (default: 1000).
 
-Sample command:
+Example command:
 ```
 python main.py --dataset=precipitation --method=agem --buffer_size=1000 --offline --mini_batch_size=128 --train_update_iter=5000 --lr=0.001 --split_time=7 --random_seed=1 --log_dir=./checkpoints
 ```
 
-### (Online) EWC
+### (Online) Elastic Weight Consolidation (EWC)
 - Set the regularization strength (e.g., weight of the EWC loss) with `ewc_lambda` (default: 1.0). 
 
 Sample command:
@@ -156,17 +154,17 @@ Sample command:
 python main.py --dataset=yearbook --method=ewc --ewc_lambda=0.5 --online --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --split_time=1970 --random_seed=1 --log_dir=./checkpoints
 ```
 
-### FT
-Sample command:
+### Fine-tuning (FT)
+Example command:
 ```
 python main.py --dataset=arxiv --method=ft --mini_batch_size=64 --train_update_iter=1000 --lr=2e-5 --weight_decay=0.01 --offline --split_time=2016 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
 ```
 
-### SI
+### Synaptic Intelligence (SI)
 - Set the SI regularization strength with `--si_c` (default: 0.1).
 - Set the dampening parameter with `--epsilon` (default: 0.001).
 
-Sample command:
+Example command:
 ```
 python main.py --dataset=drug --method=si --si_c=0.1 --epsilon=0.001 --lr=5e-5 --mini_batch_size=256 --train_update_iter=5000 --split_time=2016 --random_seed=1 --log_dir=./checkpoints --data_dir=./Data/Drug-BA
 ```
