@@ -18,6 +18,7 @@ from methods.irm.irm import IRM
 from methods.si.si import SI
 from methods.simclr.simclr import SimCLR
 from methods.swav.swav import SwaV
+from methods.swa.swa import SWA
 from networks.article import ArticleNetwork
 from networks.drug import DTI_Encoder, DTI_Classifier
 from networks.fmow import FMoWNetwork
@@ -32,7 +33,7 @@ parser.add_argument('--dataset', default='yearbook',
 parser.add_argument('--regression', dest='regression', action='store_true', help='regression task for mimic datasets')
 parser.add_argument('--prediction_type', type=str, help='MIMIC: "mortality" or "readmission", "precipitation"')
 parser.add_argument('--method', default='ft',
-                    choices=['agem', 'coral', 'ensemble', 'ewc', 'ft', 'groupdro', 'irm', 'si', 'erm', 'simclr', 'swav'])
+                    choices=['agem', 'coral', 'ensemble', 'ewc', 'ft', 'groupdro', 'irm', 'si', 'erm', 'simclr', 'swav', 'swa'])
 parser.add_argument('--device', default=0, type=int, help='gpu id')
 parser.add_argument('--random_seed', default=1, type=int, help='random seed number')
 
@@ -103,7 +104,7 @@ parser.add_argument('--si_c', type=float, default=0.1, help='SI: regularisation 
 parser.add_argument('--epsilon', type=float, default=0.001,
                     help='dampening parameter: bounds "omega" when squared parameter-change goes to 0')
 
-# SimCLR
+# SimCLR and SwaV
 parser.add_argument('--finetune_iter', default=10, type=int, help='number of iterations for finetuning SimCLR classifier')
 
 ## Logging, saving, and testing options
@@ -210,5 +211,7 @@ if __name__ == '__main__':
         trainer = SimCLR(args, dataset, network, criterion, optimizer, scheduler)
     elif args.method == 'swav':
         trainer = SwaV(args, dataset, network, criterion, optimizer, scheduler)
+    elif args.method == 'swa':
+        trainer = SWA(args, dataset, network, criterion, optimizer, scheduler)
 
     trainer.run()
