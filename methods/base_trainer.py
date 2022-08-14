@@ -50,11 +50,16 @@ class BaseTrainer:
             self.train_collate_fn = collate_fn_mimic
             self.eval_collate_fn = collate_fn_mimic
         elif args.method == 'simclr':
-            self.train_collate_fn = SimCLRCollateFunction(
-                input_size=self.train_dataset.resolution,
-                vf_prob=0.5,
-                rr_prob=0.5
-            )
+            if args.dataset == 'yearbook':
+                self.train_collate_fn = SimCLRCollateFunction(
+                    input_size=self.train_dataset.resolution,
+                    vf_prob=0.5,
+                    rr_prob=0.5
+                )
+            else:
+                self.train_collate_fn = SimCLRCollateFunction(
+                    input_size=self.train_dataset.resolution
+                )
             self.eval_collate_fn = None
         elif args.method == 'swav':
             self.train_collate_fn = SwaVCollateFunction()
@@ -127,7 +132,7 @@ class BaseTrainer:
                 if self.args.lisa and i == self.args.lisa_start_time:
                     self.lisa = True
                 self.train_dataset.update_current_timestamp(t)
-                if self.args.method in ['simclr']:
+                if self.args.method in ['simclr', 'swav']:
                     self.train_dataset.ssl_training = True
                 train_dataloader = InfiniteDataLoader(dataset=self.train_dataset, weights=None, batch_size=self.mini_batch_size,
                                                     num_workers=self.num_workers, collate_fn=self.train_collate_fn)
@@ -137,7 +142,7 @@ class BaseTrainer:
                     self.train_dataset.update_historical(i + 1, data_del=True)
 
     def train_offline(self):
-        if self.args.method in ['simclr']:
+        if self.args.method in ['simclr', 'swav']:
             self.train_dataset.ssl_training = True
         for i, t in enumerate(self.train_dataset.ENV):
             if t < self.split_time:
@@ -152,7 +157,7 @@ class BaseTrainer:
                 self.train_dataset.mode = Mode.TRAIN
                 self.train_dataset.update_current_timestamp(t)
                 # Train
-                if self.args.method in ['simclr']:
+                if self.args.method in ['simclr', 'swav']:
                     self.train_dataset.ssl_training = True
                 train_id_dataloader = InfiniteDataLoader(dataset=self.train_dataset, weights=None,
                                                          batch_size=self.mini_batch_size,

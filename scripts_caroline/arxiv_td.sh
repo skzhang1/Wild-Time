@@ -13,6 +13,6 @@ source /iris/u/huaxiu/venvnew/bin/activate
 
 cd ..
 
-python main.py --dataset=arxiv --method=erm --offline --split_time=2016 --mini_batch_size=64 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --eval_next_timesteps=5 --num_workers=8 --random_seed=1 --log_dir=./checkpoints --difficulty
-python main.py --dataset=arxiv --method=erm --offline --split_time=2016 --mini_batch_size=64 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --eval_next_timesteps=5 --num_workers=8 --random_seed=2 --log_dir=./checkpoints --difficulty
-python main.py --dataset=arxiv --method=erm --offline --split_time=2016 --mini_batch_size=64 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --eval_next_timesteps=5 --num_workers=8 --random_seed=3 --log_dir=./checkpoints --difficulty
+python main.py --dataset=arxiv --method=erm --offline --split_time=2016 --mini_batch_size=64 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --num_workers=8 --random_seed=1 --eval_all_timesteps
+# python main.py --dataset=arxiv --method=erm --offline --split_time=2016 --mini_batch_size=64 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --num_workers=8 --random_seed=2 --eval_all_timesteps
+# python main.py --dataset=arxiv --method=erm --offline --split_time=2016 --mini_batch_size=64 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --num_workers=8 --random_seed=3 --eval_all_timesteps

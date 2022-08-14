@@ -17,6 +17,7 @@ from methods.groupdro.groupdro import GroupDRO
 from methods.irm.irm import IRM
 from methods.si.si import SI
 from methods.simclr.simclr import SimCLR
+from methods.swav.swav import SwaV
 from networks.article import ArticleNetwork
 from networks.drug import DTI_Encoder, DTI_Classifier
 from networks.fmow import FMoWNetwork
@@ -31,7 +32,7 @@ parser.add_argument('--dataset', default='yearbook',
 parser.add_argument('--regression', dest='regression', action='store_true', help='regression task for mimic datasets')
 parser.add_argument('--prediction_type', type=str, help='MIMIC: "mortality" or "readmission", "precipitation"')
 parser.add_argument('--method', default='ft',
-                    choices=['agem', 'coral', 'ensemble', 'ewc', 'ft', 'groupdro', 'irm', 'si', 'erm', 'simclr'])
+                    choices=['agem', 'coral', 'ensemble', 'ewc', 'ft', 'groupdro', 'irm', 'si', 'erm', 'simclr', 'swav'])
 parser.add_argument('--device', default=0, type=int, help='gpu id')
 parser.add_argument('--random_seed', default=1, type=int, help='random seed number')
 
@@ -152,10 +153,6 @@ if __name__ == '__main__':
         network = YearbookNetwork(
             args, num_input_channels=3, num_classes=dataset.num_classes).cuda()
         optimizer = torch.optim.Adam(network.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-        # if args.method == 'simclr':
-        #     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
-        #         optimizer, T_max=10000
-        #     )
 
     elif args.dataset in ['fmow']:
         criterion = nn.CrossEntropyLoss(reduction=reduction).cuda()
@@ -211,5 +208,7 @@ if __name__ == '__main__':
         trainer = IRM(args, dataset, network, criterion, optimizer, scheduler)
     elif args.method == 'simclr':
         trainer = SimCLR(args, dataset, network, criterion, optimizer, scheduler)
+    elif args.method == 'swav':
+        trainer = SwaV(args, dataset, network, criterion, optimizer, scheduler)
 
     trainer.run()

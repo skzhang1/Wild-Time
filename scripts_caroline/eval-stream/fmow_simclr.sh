@@ -4,7 +4,7 @@
 #SBATCH --nodes=1 # Only use one node (machine)
 #SBATCH --mem=256G # Request 16GB of memory
 #SBATCH --gres=gpu:1 # Request one GPU
-#SBATCH --job-name="fmow-simclr" # Name the job (for easier monitoring)
+#SBATCH --job-name="fmow-simclr-eval-stream" # Name the job (for easier monitoring)
 #SBATCH --mail-type=END,FAIL          # Mail events (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=cchoi1@stanford.edu     # Where to send mail
 
@@ -13,6 +13,6 @@ source /iris/u/huaxiu/venvnew/bin/activate
 
 cd ../..
 
-python main.py --dataset=fmow --method=simclr --offline --mini_batch_size=32 --train_update_iter=500 --finetune_iter=100 --lr=1e-4 --weight_decay=0.0 --split_time=10 --num_workers=8 --random_seed=1
-python main.py --dataset=fmow --method=simclr --offline --mini_batch_size=32 --train_update_iter=500 --finetune_iter=100 --lr=1e-4 --weight_decay=0.0 --split_time=10 --num_workers=8 --random_seed=2
-python main.py --dataset=fmow --method=simclr --offline --mini_batch_size=32 --train_update_iter=500 --finetune_iter=100 --lr=1e-4 --weight_decay=0.0 --split_time=10 --num_workers=8 --random_seed=3
+python main.py --dataset=fmow --method=simclr --mini_batch_size=64 --train_update_iter=300 --finetune_iter=300 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=1 --eval_next_timesteps=6
+python main.py --dataset=fmow --method=simclr --mini_batch_size=64 --train_update_iter=300 --finetune_iter=300 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=2 --eval_next_timesteps=6
+python main.py --dataset=fmow --method=simclr --mini_batch_size=64 --train_update_iter=300 --finetune_iter=300 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=3 --eval_next_timesteps=6

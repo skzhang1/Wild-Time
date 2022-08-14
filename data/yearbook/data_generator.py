@@ -128,7 +128,7 @@ class Yearbook(YearbookBase):
         image_tensor = torch.FloatTensor(image).permute(2, 0, 1)
         label_tensor = torch.LongTensor([label])
 
-        if self.args.method == 'simclr' and self.ssl_training:
+        if self.args.method in ['simclr', 'swav'] and self.ssl_training:
             tensor_to_PIL = transforms.ToPILImage()
             image_tensor = tensor_to_PIL(image_tensor)
             return image_tensor, label_tensor, ''

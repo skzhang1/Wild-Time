@@ -106,7 +106,7 @@ def preprocess_orig(args):
         datasets[year][Mode.TEST_OOD]['labels'] = np.concatenate((datasets[year][Mode.TRAIN]['labels'], datasets[year][Mode.TEST_ID]['labels']), axis=0)
     del train_image_idxs, train_labels, val_image_idxs, val_labels, test_id_image_idxs, test_id_labels
 
-    # Intermediate Years 2013 - 2015
+    # Intermediate Years 2013 - 2016
     val_ood_image_idxs, val_ood_labels = get_image_idxs_and_labels('val', args.data_dir)
     for year in range(11, 14):
         datasets[year] = {}
@@ -126,7 +126,7 @@ def preprocess_orig(args):
 
     # OOD Years 2016 - 2018
     test_ood_image_idxs, test_ood_labels = get_image_idxs_and_labels('test', args.data_dir)
-    for year in range(14, 17):
+    for year in range(14, 16):
         datasets[year] = {}
         datasets[year][Mode.TRAIN] = {}
         datasets[year][Mode.TEST_ID] = {}

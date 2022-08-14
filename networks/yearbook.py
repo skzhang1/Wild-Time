@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 from lightly.models.modules.heads import SimCLRProjectionHead
+from lightly.models.modules import SwaVProjectionHead, SwaVPrototypes
 
 class YearbookNetwork(nn.Module):
     def __init__(self, args, num_input_channels, num_classes, ssl_training=False):
@@ -10,8 +11,14 @@ class YearbookNetwork(nn.Module):
                                  self.conv_block(32, 32), self.conv_block(32, 32))
         self.hid_dim = 32
         self.classifier = nn.Linear(32, num_classes)
-        # Projection head for SimCLR
-        self.projection_head = SimCLRProjectionHead(128, 128, 128)
+
+        # SimCLR: projection head
+        if self.args.method == 'simclr':
+            self.projection_head = SimCLRProjectionHead(32, 32, 128)
+        # SwaV: projection head and prototypes
+        elif self.args.method == 'swav':
+            self.projection_head = SwaVProjectionHead(32, 32, 128)
+            self.prototypes = SwaVPrototypes(128, n_prototypes=32)
         self.ssl_training = ssl_training
 
     def conv_block(self, in_channels, out_channels):
@@ -24,10 +31,13 @@ class YearbookNetwork(nn.Module):
 
     def forward(self, x):
         x = self.enc(x)
+        x = torch.mean(x, dim=(2, 3))
 
         if self.args.method == 'simclr' and self.ssl_training:
-            h = x.flatten(start_dim=1)
-            return self.projection_head(h)
+            return self.projection_head(x)
+        elif self.args.method == 'swav' and self.ssl_training:
+            x = self.projection_head(x)
+            x = nn.functional.normalize(x, dim=1, p=2)
+            return self.prototypes(x)
         else:
-            h = torch.mean(x, dim=(2, 3))
-            return self.classifier(h)
+            return self.classifier(x)

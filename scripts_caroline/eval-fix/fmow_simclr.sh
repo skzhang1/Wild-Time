@@ -13,6 +13,6 @@ source /iris/u/huaxiu/venvnew/bin/activate
 
 cd ../..
 
-python main.py --dataset=fmow --method=simclr --offline --mini_batch_size=32 --train_update_iter=2400 --finetune_iter=600 --lr=1e-4 --weight_decay=0.0 --split_time=10 --num_workers=8 --random_seed=1
-python main.py --dataset=fmow --method=simclr --offline --mini_batch_size=32 --train_update_iter=2400 --finetune_iter=600 --lr=1e-4 --weight_decay=0.0 --split_time=10 --num_workers=8 --random_seed=2
-python main.py --dataset=fmow --method=simclr --offline --mini_batch_size=32 --train_update_iter=2400 --finetune_iter=600 --lr=1e-4 --weight_decay=0.0 --split_time=10 --num_workers=8 --random_seed=3
+python main.py --dataset=fmow --method=simclr --offline --mini_batch_size=64 --train_update_iter=1500 --finetune_iter=1500 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=1
+python main.py --dataset=fmow --method=simclr --offline --mini_batch_size=64 --train_update_iter=1500 --finetune_iter=1500 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=2
+python main.py --dataset=fmow --method=simclr --offline --mini_batch_size=64 --train_update_iter=1500 --finetune_iter=1500 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=3

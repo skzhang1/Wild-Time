@@ -1,21 +1,15 @@
 """Feature Tokenizer Transformer Model"""
-import logging
 
-import ipdb
 import math
 from collections import OrderedDict
 from typing import Dict
 
-import pandas as pd
 import pytorch_lightning as pl
 import torch
 import torch.nn as nn
 from omegaconf import DictConfig
-
-from pytorch_tabular.utils import _initialize_layers, _linear_dropout_bn
-
-from pytorch_tabular.models.base_model import BaseModel
 from pytorch_tabular.models.common import SharedEmbeddings, TransformerEncoderBlock
+from pytorch_tabular.utils import _linear_dropout_bn
 
 
 def _initialize_kaiming(x, initialization, d_sqrt_inv):

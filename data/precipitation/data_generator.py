@@ -9,8 +9,6 @@ from sklearn.preprocessing import MinMaxScaler
 from data.precipitation.preprocess import preprocess
 from data.utils import Mode
 
-PREPROCESSED_FILE = 'weather.pkl'
-
 continuous_cols = [
     "climate_pressure", "climate_temperature", "cmc_0_0_0_1000", "cmc_0_0_0_2", "cmc_0_0_0_2_grad",
     "cmc_0_0_0_2_interpolated", "cmc_0_0_0_2_next", "cmc_0_0_0_500", "cmc_0_0_0_700", "cmc_0_0_0_850",

@@ -34,7 +34,7 @@ class FMoWBase(Dataset):
         self.num_classes = 62
         self.current_time = 0
         self.num_tasks = 17
-        self.ENV = [year for year in range(0, 16)]
+        self.ENV = [year for year in range(0, self.num_tasks - 1)]
         self.resolution = 224
         self.mode = Mode.TRAIN
         self.ssl_training = False
@@ -46,7 +46,6 @@ class FMoWBase(Dataset):
         start_idx = 0
         for year in sorted(self.datasets.keys()):
             count = len(self.datasets[year][self.mode]['labels'])
-            print('year:', year, 'count', count)
             cumulative_batch_size += min(args.mini_batch_size, count)
             if args.method in ['erm']:
                 self.input_dim.append((cumulative_batch_size, 3, 32, 32))
@@ -137,7 +136,7 @@ class FMoW(FMoWBase):
         image_tensor = self.transform(self.get_input(idx))
         label_tensor = torch.LongTensor([self.datasets[self.current_time][self.mode]['labels'][idx]])
 
-        if self.args.method == 'simclr' and self.ssl_training:
+        if self.args.method in ['simclr', 'swav'] and self.ssl_training:
             tensor_to_PIL = transforms.ToPILImage()
             image_tensor = tensor_to_PIL(image_tensor)
             return image_tensor, label_tensor, ''

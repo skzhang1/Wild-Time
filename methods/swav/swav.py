@@ -48,21 +48,20 @@ class SwaV(BaseTrainer):
     def train_step(self, dataloader):
         self.network.train()
         loss_all = []
-        for step, (x, y, _) in enumerate(dataloader):
+        for step, (batch, _, _) in enumerate(dataloader):
             # Prepare data
-            (x0, x1), y = prepare_data(x, y, str(self.train_dataset))
+            self.network.prototypes.normalize()
+            # (x0, x1), y = prepare_data(x, y, str(self.train_dataset))
 
-            z0 = self.network(x0)
-            z1 = self.network(x1)
-            loss = self.ssl_criterion(z0, z1)
+            multi_crop_features = [self.network(x.cuda()) for x in batch]
+            high_resolution = multi_crop_features[:2]
+            low_resolution = multi_crop_features[2:]
+            loss = self.ssl_criterion(high_resolution, low_resolution)
 
             loss_all.append(loss.item())
             loss.backward()
             self.optimizer.step()
             self.optimizer.zero_grad()
-
-            if step % 500 == 0:
-                print('step', step, 'loss', loss)
 
             if step == self.train_update_iter:
                 if self.scheduler is not None:

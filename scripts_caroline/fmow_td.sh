@@ -13,6 +13,10 @@ source /iris/u/huaxiu/venvnew/bin/activate
 
 cd ..
 
-python main.py --dataset=fmow --method=erm --offline --mini_batch_size=64 --train_update_iter=3000 --lr=1e-4 --weight_decay=0.0 --split_time=10 --num_workers=8 --random_seed=1  --log_dir=./checkpoints --difficulty
-python main.py --dataset=fmow --method=erm --offline --mini_batch_size=64 --train_update_iter=3000 --lr=1e-4 --weight_decay=0.0 --split_time=10 --num_workers=8 --random_seed=2  --log_dir=./checkpoints --difficulty
-python main.py --dataset=fmow --method=erm --offline --mini_batch_size=64 --train_update_iter=3000 --lr=1e-4 --weight_decay=0.0 --split_time=10 --num_workers=8 --random_seed=3  --log_dir=./checkpoints --difficulty
+python main.py --dataset=fmow --method=erm --offline --mini_batch_size=64 --train_update_iter=3000 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=1  --difficulty
+python main.py --dataset=fmow --method=erm --offline --mini_batch_size=64 --train_update_iter=3000 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=2  --difficulty
+python main.py --dataset=fmow --method=erm --offline --mini_batch_size=64 --train_update_iter=3000 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=3  --difficulty
+
+python main.py --dataset=fmow --method=erm --offline --mini_batch_size=64 --train_update_iter=3000 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=1  --difficulty
+python main.py --dataset=fmow --method=erm --offline --mini_batch_size=64 --train_update_iter=3000 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=2  --difficulty
+python main.py --dataset=fmow --method=erm --offline --mini_batch_size=64 --train_update_iter=3000 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=3  --difficulty
