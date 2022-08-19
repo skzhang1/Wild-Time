@@ -51,3 +51,15 @@ python main.py --dataset=fmow --method=ft --mini_batch_size=64 --train_update_it
 python main.py --dataset=fmow --method=si --si_c=0.1 --epsilon=0.001 --mini_batch_size=64 --train_update_iter=500 --lr=1e-4 --weight_decay=0.0 --split_time=13 --random_seed=1 --eval_next_timesteps=6
 python main.py --dataset=fmow --method=si --si_c=0.1 --epsilon=0.001 --mini_batch_size=64 --train_update_iter=500 --lr=1e-4 --weight_decay=0.0 --split_time=13 --random_seed=2 --eval_next_timesteps=6
 python main.py --dataset=fmow --method=si --si_c=0.1 --epsilon=0.001 --mini_batch_size=64 --train_update_iter=500 --lr=1e-4 --weight_decay=0.0 --split_time=13 --random_seed=3 --eval_next_timesteps=6
+
+python main.py --dataset=fmow --method=simclr --offline --mini_batch_size=64 --train_update_iter=250 --finetune_iter=250 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=1
+python main.py --dataset=fmow --method=simclr --offline --mini_batch_size=64 --train_update_iter=250 --finetune_iter=250 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=2
+python main.py --dataset=fmow --method=simclr --offline --mini_batch_size=64 --train_update_iter=250 --finetune_iter=250 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=3
+
+python main.py --dataset=fmow --method=swav --offline --mini_batch_size=64 --train_update_iter=250 --finetune_iter=250 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=1
+python main.py --dataset=fmow --method=swav --offline --mini_batch_size=64 --train_update_iter=250 --finetune_iter=250 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=2
+python main.py --dataset=fmow --method=swav --offline --mini_batch_size=64 --train_update_iter=250 --finetune_iter=250 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=3
+
+python main.py --dataset=fmow --method=swa --eval_next_timesteps=6 --mini_batch_size=64 --train_update_iter=500 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=1
+python main.py --dataset=fmow --method=swa --eval_next_timesteps=6 --mini_batch_size=64 --train_update_iter=500 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=2
+python main.py --dataset=fmow --method=swa --eval_next_timesteps=6 --mini_batch_size=64 --train_update_iter=500 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=3

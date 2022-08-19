@@ -80,7 +80,7 @@ class TdcDtiDgBase(data.Dataset):
         if args.reduced_train_prop is None:
             self.data_file = f'{str(self)}_preprocessed.pkl'
         else:
-            self.data_file = f'{str(self)}__preprocessed_{args.reduced_train_prop}.pkl'
+            self.data_file = f'{str(self)}_preprocessed_{args.reduced_train_prop}.pkl'
         self.datasets = pickle.load(open(os.path.join(args.data_dir, self.data_file), 'rb'))
 
         self.args = args

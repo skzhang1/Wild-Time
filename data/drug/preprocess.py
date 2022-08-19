@@ -59,16 +59,18 @@ def trans_drug(x):
 
 def preprocess_reduced_train_set(args):
     print(f'Preprocessing reduced train proportion dataset and saving to drug_preprocessed_{args.reduced_train_prop}.pkl')
-    np.random.seed(0)
 
     orig_data_file = os.path.join(args.data_dir, f'drug_preprocessed.pkl')
     dataset = pickle.load(open(orig_data_file, 'rb'))
     years = [year for year in list(range(2013, 2021))]
     train_fraction = args.reduced_train_prop / (1 - ID_HELD_OUT)
 
+    start_idx = 0
+    end_idx = 0
     task_idxs = {}
     for year in years:
         train_data = dataset[year][Mode.TRAIN]
+        print(train_data)
         if year != 2019:
             start_idx = end_idx
             end_idx = start_idx + len(train_data)
@@ -79,19 +81,13 @@ def preprocess_reduced_train_set(args):
 
         num_train_samples = len(train_data)
         reduced_num_train_samples = int(train_fraction * num_train_samples)
-        start_idx, end_idx = task_idxs[year]
 
-        seed_ = np.random.get_state()
-        np.random.seed(0)
-        idxs = np.random.permutation(np.arange(start_idx, end_idx))
-        np.random.set_state(seed_)
-
-        new_train_data = train_data.loc[idxs[:reduced_num_train_samples], :].reset_index()
+        new_train_data = train_data.loc[:reduced_num_train_samples, :].reset_index(drop=True)
         dataset[year][Mode.TRAIN] = new_train_data
 
     preprocessed_data_file = os.path.join(args.data_dir, f'drug_preprocessed_{args.reduced_train_prop}.pkl')
-    pickle.dump(dataset, open(preprocessed_data_file, 'wb'))
-    np.random.seed(args.random_seed)
+    with open(preprocessed_data_file, 'wb') as f:
+        pickle.dump(dataset, f)
 
 
 def preprocess_orig(args):
@@ -118,6 +114,8 @@ def preprocess_orig(args):
     datasets = {}
     task_idxs = {}
     ENV = [year for year in list(range(2013, 2021))]
+    start_idx = 0
+    end_idx = 0
     for year in ENV:
         datasets[year] = {}
         if year < 2019:

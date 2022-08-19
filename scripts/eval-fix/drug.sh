@@ -23,4 +23,4 @@ python main.py --dataset=drug --method=ewc --ewc_lambda=0.5 --online --offline -
 python main.py --dataset=drug --method=ft --offline --lr=5e-5 --mini_batch_size=256 --train_update_iter=5000--split_time=2016 --random_seed=1 --log_dir=./checkpoints --data_dir=./Data/Drug-BA
 
 #SI
-python main.py --dataset=drug --method=si --si_c=0.1 --epsilon=0.001 --lr=5e-5 --mini_batch_size=256 --train_update_iter=5000 --split_time=2016 --random_seed=1 --log_dir=./checkpoints --data_dir=./Data/Drug-BA
+python main.py --dataset=drug --method=si --si_c=0.1 --epsilon=0.001 --offline --lr=5e-5 --mini_batch_size=256 --train_update_iter=5000 --split_time=2016 --random_seed=1 --log_dir=./checkpoints --data_dir=./Data/Drug-BA
