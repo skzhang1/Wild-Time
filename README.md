@@ -54,12 +54,12 @@ Due to patient confidentiality, users must be credentialed on PhysioNet and sign
 Here are instructions for how to do so.
 
 1. Become a credentialed user on PhysioNet. This means that you must formally submit your personal details for review, so that PhysioNet can confirm your identity.
-  - If you do not have a PhysioNet account, register for one \href{https://physionet.org/register/}{here}.
-  - Follow these \hef{https://physionet.org/settings/credentialing/}{instructions for credentialing on PhysioNet}.
-  - Complete the \href{https://physionet.org/about/citi-course/}{"Data or Specimens Only Research" training course}.
+  - If you do not have a PhysioNet account, register for one [here](https://physionet.org/register/).
+  - Follow these [for credentialing on PhysioNet](https://physionet.org/settings/credentialing/}{instructions).
+  - Complete the ["Data or Specimens Only Research" training course](https://physionet.org/about/citi-course/).
 2. Sign the data use agreement.
-  - \href{https://physionet.org/login/}{Log in} to your PhysioNet account.
-  - Go to the \href{https://physionet.org/content/mimiciv/2.0/}{MIMIC-IV dataset project page}.
+  - [Log in](https://physionet.org/login/) to your PhysioNet account.
+  - Go to the [MIMIC-IV dataset project page](https://physionet.org/content/mimiciv/2.0/).
   - Locate the "Files" section in the project description.
   - Click through, read, and sign the Data Use Agreement (DUA).
 4. Go to https://physionet.org/content/mimiciv/1.0/ and download the following CSV files from the "core" and "hosp" modules to `./Data`:
@@ -211,8 +211,8 @@ In `checkpoints/`, we provide pretrained model checkpoints for all baselines use
 We list the licenses for each Wild-Time dataset below:
 
 - Yearbook: MIT License
-- FMoW: \href{https://raw.githubusercontent.com/fMoW/dataset/master/LICENSE}{The Functional Map of the World Challenge Public License}
-- MIMIC-IV (Readmission and Mortality): \href{https://physionet.org/content/mimiciv/view-license/0.4/}{PhysioNet Credentialed Health Data License 1.5.0}
+- FMoW: [The Functional Map of the World Challenge Public License](https://raw.githubusercontent.com/fMoW/dataset/master/LICENSE)
+- MIMIC-IV (Readmission and Mortality): [https://physionet.org/content/mimiciv/view-license/0.4/](PhysioNet Credentialed Health Data License 1.5.0)
 - Drug-BA: MIT License
 - Precipitation: CC BY-NC 4.0
 - Huffpost: CC0: Public Domain
