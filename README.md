@@ -53,10 +53,16 @@ To download the ArXiv, Drug-BA, FMoW, HuffPost, Precipitation, and Yearbook data
 Due to patient confidentiality, users must be credentialed on PhysioNet and sign the Data Use Agreement before accessing the MIMIC-IV dataset.
 Here are instructions for how to do so.
 
-1. Obtain 
-  - INSTRUCTIONS [TO DO: ADD THIS]
-2. 
-3. Go to https://physionet.org/content/mimiciv/1.0/ and download the following CSV files from the "core" and "hosp" modules to `./Data`:
+1. Become a credentialed user on PhysioNet. This means that you must formally submit your personal details for review, so that PhysioNet can confirm your identity.
+  - If you do not have a PhysioNet account, register for one \href{https://physionet.org/register/}{here}.
+  - Follow these \hef{https://physionet.org/settings/credentialing/}{instructions for credentialing on PhysioNet}.
+  - Complete the \href{https://physionet.org/about/citi-course/}{"Data or Specimens Only Research" training course}.
+2. Sign the data use agreement.
+  - \href{https://physionet.org/login/}{Log in} to your PhysioNet account.
+  - Go to the \href{https://physionet.org/content/mimiciv/2.0/}{MIMIC-IV dataset project page}.
+  - Locate the "Files" section in the project description.
+  - Click through, read, and sign the Data Use Agreement (DUA).
+4. Go to https://physionet.org/content/mimiciv/1.0/ and download the following CSV files from the "core" and "hosp" modules to `./Data`:
     - patients.csv
     - admissions.csv
     - diagnoses_icd.csv
@@ -121,9 +127,8 @@ Example command:
 python main.py --dataset=huffpost --method=erm --offline --mini_batch_size=32 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --split_time=2015 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
 ```
 
-
 ### LISA
-- Set the mix alpha weight with `--mix_alpha` (default: 2.0).
+- Set the interpolation ratio $\lambda \sim Beta(\alpha, \alpha)$ by specifying $\alpha$ with `--mix_alpha` (default: 2.0).
 
 Example command:
 ```
@@ -131,7 +136,7 @@ python main.py --dataset=mimic --method=erm --offline --lisa --mix_alpha=2.0 --p
 ```
 
 ### Mixup
-- Set the mix alpha weight with `--mix_alpha` (default: 2.0).
+- Set the interpolation ratio $\lambda \sim Beta(\alpha, \alpha)$ by specifying $\alpha$ with `--mix_alpha` (default: 2.0).
 
 Example command:
 ```
@@ -169,13 +174,38 @@ Example command:
 python main.py --dataset=drug --method=si --si_c=0.1 --epsilon=0.001 --lr=5e-5 --mini_batch_size=256 --train_update_iter=5000 --split_time=2016 --random_seed=1 --log_dir=./checkpoints --data_dir=./Data/Drug-BA
 ```
 
-## Datasets
-TO DO Add table describing all datasets here
+### SimCLR
+- Specify the number of iterations for which to learn representations using SimCLR with `--train_update_iter`.
+- Specify the number of iterations to finetune the classifier with `--finetune_iter`.
+
+Example command:
+```
+python main.py --dataset=fmow --method=simclr --offline --mini_batch_size=64 --train_update_iter=1500 --finetune_iter=1500 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=1
+```
+
+### SwaV
+- Specify the number of iterations for which to learn representations using SimCLR with `--train_update_iter`.
+- Specify the number of iterations to finetune the classifier with `--finetune_iter`.
+
+Example command:
+```
+python main.py --dataset=yearbook --method=swav --mini_batch_size=32 --train_update_iter=2700 --finetune_iter=300 --lr=0.001 --offline --random_seed=1 --split_time=1970
+```
+
+### Stochastic Weighted Averaging (SWA)
+
+Example command:
+```
+python main.py --dataset=huffpost --method=swa --offline --mini_batch_size=32 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --split_time=2015 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
+```
 
 ## Scripts
-In `scripts/`, we provide a set of scripts that can be used to train models on the Wild-Time datasets. These scripts contain the hyperparameter settings used to benchmark the baselines in our paper.
+In `scripts/`, we provide a set of scripts that can be used to train and evaluate models on the Wild-Time datasets. These scripts contain the hyperparameter settings used to benchmark the baselines in our paper.
 
 All Eval-Fix scripts can be found located under `scripts/eval-fix`. All Eval-Stream scripts are located under under `scripts/eval-stream`.
+
+## Checkpoints
+In `checkpoints/`, we provide pretrained model checkpoints for all baselines used in our paper under the Eval-Fix train setting.
 
 ## Acknowledgements
 
