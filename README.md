@@ -208,7 +208,7 @@ All Eval-Fix scripts can be found located under `scripts/eval-fix`. All Eval-Str
 In `checkpoints/`, we provide pretrained model checkpoints for all baselines used in our paper under the Eval-Fix train setting.
 
 ## Licenses
-We list the licenses for each Wild-Time dataset below:
+All code for Wild-Time is available under an open-source Apache 2.0 license. We list the licenses for each Wild-Time dataset below:
 
 - Yearbook: MIT License
 - FMoW: [The Functional Map of the World Challenge Public License](https://raw.githubusercontent.com/fMoW/dataset/master/LICENSE)
