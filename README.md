@@ -207,6 +207,17 @@ All Eval-Fix scripts can be found located under `scripts/eval-fix`. All Eval-Str
 ## Checkpoints
 In `checkpoints/`, we provide pretrained model checkpoints for all baselines used in our paper under the Eval-Fix train setting.
 
+## Licenses
+We list the licenses for each Wild-Time dataset below:
+
+- Yearbook: MIT License
+- FMoW: \href{https://raw.githubusercontent.com/fMoW/dataset/master/LICENSE}{The Functional Map of the World Challenge Public License}
+- MIMIC-IV (Readmission and Mortality): \href{https://physionet.org/content/mimiciv/view-license/0.4/}{PhysioNet Credentialed Health Data License 1.5.0}
+- Drug-BA: MIT License
+- Precipitation: CC BY-NC 4.0
+- Huffpost: CC0: Public Domain
+- arXiv: CC0: Public Domain
+
 ## Acknowledgements
 
 We thank the authors of all baselines. Most of our implementations follow the corresponding original released versions. We thank Zhenbang Wu for his assistance in preprocessing the MIMIC-IV dataset.
