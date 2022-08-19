@@ -55,11 +55,11 @@ Here are instructions for how to do so.
 
 1. Become a credentialed user on PhysioNet. This means that you must formally submit your personal details for review, so that PhysioNet can confirm your identity.
   - If you do not have a PhysioNet account, register for one [here](https://physionet.org/register/).
-  - Follow these [for credentialing on PhysioNet](https://physionet.org/settings/credentialing/}{instructions).
-  - Complete the ["Data or Specimens Only Research" training course](https://physionet.org/about/citi-course/).
+  - Follow these [instructions](https://physionet.org/settings/credentialing/}{instructions) for credentialing on PhysioNet.
+  - Complete the "Data or Specimens Only Research" [training course](https://physionet.org/about/citi-course/).
 2. Sign the data use agreement.
   - [Log in](https://physionet.org/login/) to your PhysioNet account.
-  - Go to the [MIMIC-IV dataset project page](https://physionet.org/content/mimiciv/2.0/).
+  - Go to the MIMIC-IV dataset [project page](https://physionet.org/content/mimiciv/2.0/).
   - Locate the "Files" section in the project description.
   - Click through, read, and sign the Data Use Agreement (DUA).
 4. Go to https://physionet.org/content/mimiciv/1.0/ and download the following CSV files from the "core" and "hosp" modules to `./Data`:
@@ -212,7 +212,7 @@ We list the licenses for each Wild-Time dataset below:
 
 - Yearbook: MIT License
 - FMoW: [The Functional Map of the World Challenge Public License](https://raw.githubusercontent.com/fMoW/dataset/master/LICENSE)
-- MIMIC-IV (Readmission and Mortality): [https://physionet.org/content/mimiciv/view-license/0.4/](PhysioNet Credentialed Health Data License 1.5.0)
+- MIMIC-IV (Readmission and Mortality): [PhysioNet Credentialed Health Data License 1.5.0](https://physionet.org/content/mimiciv/view-license/0.4/)
 - Drug-BA: MIT License
 - Precipitation: CC BY-NC 4.0
 - Huffpost: CC0: Public Domain
