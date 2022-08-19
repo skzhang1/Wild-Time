@@ -28,19 +28,28 @@ To download the Wild-Time datasets and run baselines, please clone this repo to 
 ```
 git clone git@github.com:huaxiuyao/Wild-Time.git
 cd Wild-Time
+pip install -r requirements.txt
 ```
 In the directory `Wild-Time`, create the folders `Data`, `checkpoints`, and `results`.
 
-### Requirements
+### Dependencies
 
-- numpy=1.19.1
-- pytorch=1.11.0
-- pytorch-tabula=0.7.0
-- pytorch-transformers=1.2.0
-- pytorch-lightning=1.5.9
-- pandas=1.4.2
-- huggingface-hub=0.5.1
-- PyTDC=0.3.6
+- gdown==4.5.1
+- lightly==1.2.27
+- matplotlib==3.5.0
+- numpy==1.19.5
+- omegaconf==2.0.6
+- pandas==1.1.3
+- Pillow==9.2.0
+- pytorch_lightning==1.2.7
+- pytorch_tabular==0.7.0
+- scikit_learn==1.1.2
+- tdc==0.1
+- torch==1.7.0
+- torchcontrib==0.0.2
+- torchvision==0.8.1
+- transformers==4.21.1
+- wilds==2.0.0
 
 ### Downloading the Wild-Time datasets
 
@@ -205,7 +214,9 @@ In `scripts/`, we provide a set of scripts that can be used to train and evaluat
 All Eval-Fix scripts can be found located under `scripts/eval-fix`. All Eval-Stream scripts are located under under `scripts/eval-stream`.
 
 ## Checkpoints
-In `checkpoints/`, we provide pretrained model checkpoints for all baselines used in our paper under the Eval-Fix train setting.
+In `model_checkpoints/`, we provide pretrained model checkpoints for all baselines used in our paper under the Eval-Fix setting. 
+
+To use these checkpoints, add the flags `--load_model --log_dir=./model_checkpoints` to your command.
 
 ## Licenses
 All code for Wild-Time is available under an open-source Apache 2.0 license. We list the licenses for each Wild-Time dataset below:
