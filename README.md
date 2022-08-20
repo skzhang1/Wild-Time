@@ -23,7 +23,7 @@ If you find this repository useful in your research, please cite the following p
 We will release the arXiv version of our paper, along with the final code repository, in 1-2 months.
 
 ## Installation
-To download the Wild-Time datasets and run baselines, please clone this repo to your local machine.
+To download the Wild-Time datasets and run baselines, clone this repo to your local machine.
 
 ```
 git clone git@github.com:huaxiuyao/Wild-Time.git
@@ -55,12 +55,12 @@ In the directory `Wild-Time`, create the folders `Data`, `checkpoints`, and `res
 
 Create the folder `Wild-Time/Data`.
 
-To download the ArXiv, Drug-BA, FMoW, HuffPost, Precipitation, and Yearbook datasets, run the command `python download_datasets.py`. To download the MIMIC dataset, please read the next section.
+To download the MIMIC-WildT dataset, users must be credentialed on PhysioNet and sign the Data Use Agreement due to data use resstrictions.
+Please refer to the next section for instructions.
+
+If you do not need to download the MIMIC-WildT dataset, you can skip the next section and simply run the command `python download_datasets.py --datasets=arxiv, drug, fmow, huffpost, precipitation, yearbook`.
 
 ### Accessing the MIMIC-IV dataset
-
-Due to patient confidentiality, users must be credentialed on PhysioNet and sign the Data Use Agreement before accessing the MIMIC-IV dataset.
-Here are instructions for how to do so.
 
 1. Become a credentialed user on PhysioNet. This means that you must formally submit your personal details for review, so that PhysioNet can confirm your identity.
   - If you do not have a PhysioNet account, register for one [here](https://physionet.org/register/).
@@ -76,8 +76,9 @@ Here are instructions for how to do so.
     - admissions.csv
     - diagnoses_icd.csv
     - procedures_icd.csv
-   Decompress the files and put them under `./Data/raw/mimic4`.
-4. Run the command `python ../src/data/mimic/preprocess.py` to get the Wild-Time MIMIC datasets: `mimic_preprocessed_readmission.pkl` and `mimic_preprocessed_mortality.pkl`.
+   Decompress the files and put them under `./Data`.
+5. Run the command `python download_datasets.py --datasets=arxiv, drug, fmow, huffpost, precipitation, yearbook, mimic`.
+
 
 ## Running baselines
 
