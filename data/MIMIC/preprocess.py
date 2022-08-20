@@ -33,10 +33,10 @@ def preprocess_reduced_train_set(args):
 
     preprocessed_data_file = os.path.join(args.data_dir, f'mimic_preprocessed_{args.prediction_type}_{args.reduced_train_prop}.pkl')
     pickle.dump(dataset, open(preprocessed_data_file, 'wb'))
-    np.random.seed(args.random_seed)
 
 
-def preprocess_MIMIC(data, type):
+def preprocess_MIMIC(data, type, args):
+    np.random.seed(0)
     ENV = [i for i in list(range(2008, 2020))]
     datasets = {}
     temp_datasets = {}
@@ -79,23 +79,21 @@ def preprocess_MIMIC(data, type):
         datasets[eachyear][Mode.TEST_OOD]['code'] = temp_datasets[eachyear]['code']
         datasets[eachyear][Mode.TEST_OOD]['labels'] = temp_datasets[eachyear]['labels']
 
-    with open(f'./Data/mimic_preprocessed_{type}.pkl','wb') as f:
+    with open(os.path.join(args.data_dir, f'mimic_preprocessed_{type}.pkl'),'wb') as f:
         pickle.dump(datasets, f)
 
 
-def preprocess_orig():
-    if not os.path.exists('./Data/mimic_stay_dict.pkl'):
+def preprocess_orig(args):
+    if not os.path.exists(os.path.join(args.data_dir, 'mimic_stay_dict.pkl')):
         get_stay_dict()
-    data = pickle.load(open('./Data/mimic_stay_dict.pkl', 'rb'))
-    preprocess_MIMIC(data, 'readmission')
-    preprocess_MIMIC(data, 'mortality')
+    data = pickle.load(open(os.path.join(args.data_dir, 'mimic_stay_dict.pkl'), 'rb'))
+    preprocess_MIMIC(data, 'readmission', args)
+    preprocess_MIMIC(data, 'mortality', args)
 
 
 def preprocess(args):
-    np.random.seed(0)
     if not os.path.isfile(os.path.join(args.data_dir, f'mimic_preprocessed_{args.prediction_type}.pkl')):
         preprocess_orig()
     if args.reduced_train_prop is not None:
         if not os.path.isfile(os.path.join(args.data_dir, f'mimic_preprocessed_{args.prediction_type}_{args.reduced_train_prop}.pkl')):
             preprocess_reduced_train_set(args)
-    np.random.seed(args.random_seed)

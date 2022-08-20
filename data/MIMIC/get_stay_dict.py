@@ -100,20 +100,19 @@ def proc_icd_to_3digit(icd):
         raise
 
 
-def process_mimic_data():
+def process_mimic_data(data_dir):
     set_seed(seed=42)
-    data_path = os.getcwd()
 
-    for file in ['patients.csv, diagnoses_icd.csv', 'procedures_icd.csv']:
-        if not os.path.isfile(os.path.join(data_path, f'raw/mimic4/{file}')):
-            raise ValueError(f'Please download {file} to {data_path}/raw/mimic4')
+    for file in ['patients.csv', 'diagnoses_icd.csv', 'procedures_icd.csv']:
+        if not os.path.isfile(os.path.join(data_dir, file)):
+            raise ValueError(f'Please download {file} to {data_dir}')
 
     # Patients
-    patients = pd.read_csv(os.path.join(data_path, 'raw/mimic4/patients.csv'))
+    patients = pd.read_csv(os.path.join(data_dir, 'patients.csv'))
     patients['real_anchor_year_sample'] = patients.anchor_year_group.apply(lambda x: sample_year(x))
     patients = patients[['subject_id', 'gender', 'anchor_age', 'anchor_year', 'real_anchor_year_sample']]
     patients = patients.dropna().reset_index(drop=True)
-    admissions = pd.read_csv(os.path.join(data_path, 'raw/mimic4/admissions.csv'))
+    admissions = pd.read_csv(os.path.join(data_dir, 'admissions.csv'))
     admissions['admittime'] = pd.to_datetime(admissions['admittime']).dt.date
     admissions = admissions[['subject_id', 'hadm_id', 'ethnicity', 'admittime', 'hospital_expire_flag']]
     admissions = admissions.dropna()
@@ -126,7 +125,7 @@ def process_mimic_data():
     admissions = admissions.dropna().reset_index(drop=True)
 
     # Diagnoses ICD
-    diagnoses_icd = pd.read_csv(os.path.join(data_path, 'raw/mimic4/diagnoses_icd.csv'))
+    diagnoses_icd = pd.read_csv(os.path.join(data_dir, 'diagnoses_icd.csv'))
     diagnoses_icd = diagnoses_icd.dropna()
     diagnoses_icd = diagnoses_icd.drop_duplicates()
     diagnoses_icd = diagnoses_icd.sort_values(by=['subject_id', 'hadm_id', 'seq_num'])
@@ -136,7 +135,7 @@ def process_mimic_data():
     diagnoses_icd = diagnoses_icd.rename(columns={'icd_3digit': 'diagnoses'})
 
     # Procedures ICD
-    procedures_icd = pd.read_csv(os.path.join(data_path, 'raw/mimic4/procedures_icd.csv'))
+    procedures_icd = pd.read_csv(os.path.join(data_dir, 'procedures_icd.csv'))
     procedures_icd = procedures_icd.dropna()
     procedures_icd = procedures_icd.drop_duplicates()
     procedures_icd = procedures_icd.sort_values(by=['subject_id', 'hadm_id', 'seq_num'])
@@ -155,17 +154,13 @@ def process_mimic_data():
              'mortality', 'readmission']]
     df = df.merge(diagnoses_icd, on=['subject_id', 'hadm_id'], how='inner')
     df = df.merge(procedures_icd, on=['subject_id', 'hadm_id'], how='inner')
-    df.to_csv('./data_preprocessed.csv')
+    df.to_csv(os.path.join(data_dir, 'data_preprocessed.csv'))
 
     # Cohort Selection
+    processed_file = os.path.join(data_dir, 'processed_mimic_data.csv')
     df = df[df.age.apply(lambda x: (x >= 18) & (x <= 89))]
-
-    # Save
-    directory = os.path.join(data_path, 'processed/mimic4/')
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-
-    df.to_csv(os.path.join(data_path, 'processed/mimic4/data.csv'), index=False)
+    df.to_csv(processed_file, index=False)
+    return processed_file
 
 
 class MIMICStay:
@@ -193,15 +188,14 @@ class MIMICStay:
         return f'MIMIC ID-{self.icu_id}, mortality-{self.mortality}, readmission-{self.readmission}'
 
 
-def get_stay_dict():
-    process_mimic_data()
+def get_stay_dict(save_dir):
     mimic_dict = {}
-    input_path = './data/MIMIC/processed/mimic4/data.csv'
+    input_path = process_mimic_data(save_dir)
     fboj = open(input_path)
     name_list = fboj.readline().strip().split(',')
     for eachline in fboj:
-        t=eachline.strip().split(',')
-        tempdata={eachname: t[idx] for idx, eachname in enumerate(name_list)}
+        t = eachline.strip().split(',')
+        tempdata = {eachname: t[idx] for idx, eachname in enumerate(name_list)}
         mimic_value = MIMICStay(icu_id=tempdata['hadm_id'],
                                  icu_timestamp=tempdata['real_admit_year'],
                                  mortality=tempdata['mortality'],
@@ -211,6 +205,6 @@ def get_stay_dict():
                                  ethnicity=tempdata['ethnicity'])
         mimic_value.diagnosis = tempdata['diagnoses'].split(' <sep> ')
         mimic_value.treatment = tempdata['procedure'].split(' <sep> ')
-        mimic_dict[tempdata['hadm_id']]=mimic_value
+        mimic_dict[tempdata['hadm_id']] = mimic_value
 
-    pickle.dump(mimic_dict, open('./Data/mimic_stay_dict.pkl', 'wb'))
+    pickle.dump(mimic_dict, open(os.path.join(save_dir, 'mimic_stay_dict.pkl'), 'wb'))
