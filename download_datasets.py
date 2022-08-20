@@ -12,7 +12,7 @@ from data.MIMIC.preprocess import preprocess_MIMIC
 def download_gdrive(url, save_path, is_folder):
     """ Download the preprocessed data from Google Drive. """
     if not is_folder:
-        gdown.download(url=url, ooutput=save_path, quiet=False)
+        gdown.download(url=url, output=save_path, quiet=False)
     else:
         gdown.download_folder(url=url, output=save_path, quiet=False)
 

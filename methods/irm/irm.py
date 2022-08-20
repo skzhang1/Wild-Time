@@ -85,7 +85,7 @@ class IRM(BaseTrainer):
                 self.train_dataset.update_historical(i + 1)
 
             self.eval_dataset.train = False
-            avg_acc, worst_acc, best_acc = self.evaluate(i + 1)
+            avg_acc, worst_acc, best_acc = self.evaluate_stream(i + 1)
             self.task_accuracies[t] = avg_acc
             self.worst_time_accuracies[t] = worst_acc
             self.best_time_accuracies[t] = best_acc
