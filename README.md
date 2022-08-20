@@ -137,7 +137,7 @@ python main.py --dataset=huffpost --method=erm --offline --mini_batch_size=32 --
 ```
 
 ### LISA
-- Set the interpolation ratio $\lambda \sim Beta(\alpha, \alpha)$ by specifying $\alpha$ with `--mix_alpha` (default: 2.0).
+- Specify the interpolation ratio $\lambda \sim Beta(\alpha, \alpha)$ with `--mix_alpha` (default: 2.0).
 
 Example command:
 ```
@@ -145,7 +145,7 @@ python main.py --dataset=mimic --method=erm --offline --lisa --mix_alpha=2.0 --p
 ```
 
 ### Mixup
-- Set the interpolation ratio $\lambda \sim Beta(\alpha, \alpha)$ by specifying $\alpha$ with `--mix_alpha` (default: 2.0).
+- Specify the interpolation ratio $\lambda \sim Beta(\alpha, \alpha)$ with `--mix_alpha` (default: 2.0).
 
 Example command:
 ```
