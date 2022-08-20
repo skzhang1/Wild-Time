@@ -23,35 +23,44 @@ If you find this repository useful in your research, please cite the following p
 We will release the arXiv version of our paper, along with the final code repository, in 1-2 months.
 
 ## Installation
-To download the Wild-Time datasets and run baselines, please clone this repo to your local machine.
+To download the Wild-Time datasets and run baselines, clone this repo to your local machine.
 
 ```
 git clone git@github.com:huaxiuyao/Wild-Time.git
 cd Wild-Time
+pip install -r requirements.txt
 ```
 In the directory `Wild-Time`, create the folders `Data`, `checkpoints`, and `results`.
 
-### Requirements
+### Dependencies
 
-- numpy=1.19.1
-- pytorch=1.11.0
-- pytorch-tabula=0.7.0
-- pytorch-transformers=1.2.0
-- pytorch-lightning=1.5.9
-- pandas=1.4.2
-- huggingface-hub=0.5.1
-- PyTDC=0.3.6
+- gdown==4.5.1
+- lightly==1.2.27
+- matplotlib==3.5.0
+- numpy==1.19.5
+- omegaconf==2.0.6
+- pandas==1.1.3
+- Pillow==9.2.0
+- pytorch_lightning==1.2.7
+- pytorch_tabular==0.7.0
+- scikit_learn==1.1.2
+- tdc==0.1
+- torch==1.7.0
+- torchcontrib==0.0.2
+- torchvision==0.8.1
+- transformers==4.21.1
+- wilds==2.0.0
 
 ### Downloading the Wild-Time datasets
 
 Create the folder `Wild-Time/Data`.
 
-To download the ArXiv, Drug-BA, FMoW, HuffPost, Precipitation, and Yearbook datasets, run the command `python download_datasets.py`. To download the MIMIC dataset, please read the next section.
+To download the MIMIC-WildT dataset, users must be credentialed on PhysioNet and sign the Data Use Agreement due to data use resstrictions.
+Please refer to the next section for instructions.
+
+If you do not need to download the MIMIC-WildT dataset, you can skip the next section and simply run the command `python download_datasets.py --datasets=arxiv, drug, fmow, huffpost, precipitation, yearbook`.
 
 ### Accessing the MIMIC-IV dataset
-
-Due to patient confidentiality, users must be credentialed on PhysioNet and sign the Data Use Agreement before accessing the MIMIC-IV dataset.
-Here are instructions for how to do so.
 
 1. Become a credentialed user on PhysioNet. This means that you must formally submit your personal details for review, so that PhysioNet can confirm your identity.
   - If you do not have a PhysioNet account, register for one [here](https://physionet.org/register/).
@@ -67,8 +76,9 @@ Here are instructions for how to do so.
     - admissions.csv
     - diagnoses_icd.csv
     - procedures_icd.csv
-   Decompress the files and put them under `./Data/raw/mimic4`.
-4. Run the command `python ../src/data/mimic/preprocess.py` to get the Wild-Time MIMIC datasets: `mimic_preprocessed_readmission.pkl` and `mimic_preprocessed_mortality.pkl`.
+   Decompress the files and put them under `./Data`.
+5. Run the command `python download_datasets.py --datasets=arxiv, drug, fmow, huffpost, precipitation, yearbook, mimic`.
+
 
 ## Running baselines
 
@@ -128,7 +138,7 @@ python main.py --dataset=huffpost --method=erm --offline --mini_batch_size=32 --
 ```
 
 ### LISA
-- Set the interpolation ratio $\lambda \sim Beta(\alpha, \alpha)$ by specifying $\alpha$ with `--mix_alpha` (default: 2.0).
+- Specify the interpolation ratio $\lambda \sim Beta(\alpha, \alpha)$ with `--mix_alpha` (default: 2.0).
 
 Example command:
 ```
@@ -136,7 +146,7 @@ python main.py --dataset=mimic --method=erm --offline --lisa --mix_alpha=2.0 --p
 ```
 
 ### Mixup
-- Set the interpolation ratio $\lambda \sim Beta(\alpha, \alpha)$ by specifying $\alpha$ with `--mix_alpha` (default: 2.0).
+- Specify the interpolation ratio $\lambda \sim Beta(\alpha, \alpha)$ with `--mix_alpha` (default: 2.0).
 
 Example command:
 ```
@@ -205,7 +215,9 @@ In `scripts/`, we provide a set of scripts that can be used to train and evaluat
 All Eval-Fix scripts can be found located under `scripts/eval-fix`. All Eval-Stream scripts are located under under `scripts/eval-stream`.
 
 ## Checkpoints
-In `checkpoints/`, we provide pretrained model checkpoints for all baselines used in our paper under the Eval-Fix train setting.
+In `model_checkpoints/`, we provide pretrained model checkpoints for all baselines used in our paper under the Eval-Fix setting. 
+
+To use these checkpoints, add the flags `--load_model --log_dir=./model_checkpoints` to your command.
 
 ## Licenses
 All code for Wild-Time is available under an open-source Apache 2.0 license. We list the licenses for each Wild-Time dataset below:
