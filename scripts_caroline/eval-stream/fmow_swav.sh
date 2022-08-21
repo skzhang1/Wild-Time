@@ -13,6 +13,4 @@ source /iris/u/huaxiu/venvnew/bin/activate
 
 cd ../..
 
-python main.py --dataset=fmow --method=swav --mini_batch_size=64 --train_update_iter=300 --finetune_iter=300 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=1 --eval_next_timesteps=6
-python main.py --dataset=fmow --method=swav --mini_batch_size=64 --train_update_iter=300 --finetune_iter=300 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=2 --eval_next_timesteps=6
-python main.py --dataset=fmow --method=swav --mini_batch_size=64 --train_update_iter=300 --finetune_iter=300 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=3 --eval_next_timesteps=6
+python main.py --dataset=fmow --method=swav --mini_batch_size=16 --train_update_iter=300 --finetune_iter=300 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=1 --eval_next_timesteps=6

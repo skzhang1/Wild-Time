@@ -12,13 +12,13 @@ source /iris/u/huaxiu/venvnew/bin/activate
 
 cd ../..
 
-python main.py --dataset=fmow --method=simclr --offline --mini_batch_size=64 --train_update_iter=250 --finetune_iter=250 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=1
-python main.py --dataset=fmow --method=simclr --offline --mini_batch_size=64 --train_update_iter=250 --finetune_iter=250 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=2
-python main.py --dataset=fmow --method=simclr --offline --mini_batch_size=64 --train_update_iter=250 --finetune_iter=250 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=3
+python main.py --dataset=fmow --method=simclr --eval_next_timesteps=6 --mini_batch_size=64 --train_update_iter=250 --finetune_iter=250 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=1
+python main.py --dataset=fmow --method=simclr --eval_next_timesteps=6 --mini_batch_size=64 --train_update_iter=250 --finetune_iter=250 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=2
+python main.py --dataset=fmow --method=simclr --eval_next_timesteps=6 --mini_batch_size=64 --train_update_iter=250 --finetune_iter=250 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=3
 
-python main.py --dataset=fmow --method=swav --offline --mini_batch_size=64 --train_update_iter=250 --finetune_iter=250 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=1
-python main.py --dataset=fmow --method=swav --offline --mini_batch_size=64 --train_update_iter=250 --finetune_iter=250 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=2
-python main.py --dataset=fmow --method=swav --offline --mini_batch_size=64 --train_update_iter=250 --finetune_iter=250 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=3
+python main.py --dataset=fmow --method=swav --eval_next_timesteps=6 --mini_batch_size=64 --train_update_iter=250 --finetune_iter=250 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=1
+python main.py --dataset=fmow --method=swav --eval_next_timesteps=6 --mini_batch_size=64 --train_update_iter=250 --finetune_iter=250 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=2
+python main.py --dataset=fmow --method=swav --eval_next_timesteps=6 --mini_batch_size=64 --train_update_iter=250 --finetune_iter=250 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=3
 
 python main.py --dataset=fmow --method=swa --eval_next_timesteps=6 --mini_batch_size=64 --train_update_iter=500 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=1
 python main.py --dataset=fmow --method=swa --eval_next_timesteps=6 --mini_batch_size=64 --train_update_iter=500 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=2

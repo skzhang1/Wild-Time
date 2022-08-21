@@ -13,6 +13,4 @@ source /iris/u/huaxiu/venvnew/bin/activate
 
 cd ../..
 
-python main.py --dataset=yearbook --method=simclr --mini_batch_size=32 --train_update_iter=80 --finetune_iter=20 --lr=0.001 --random_seed=1 --split_time=1970 --eval_next_timesteps=10
-python main.py --dataset=yearbook --method=simclr --mini_batch_size=32 --train_update_iter=80 --finetune_iter=20 --lr=0.001 --random_seed=2 --split_time=1970 --eval_next_timesteps=10
-python main.py --dataset=yearbook --method=simclr --mini_batch_size=32 --train_update_iter=80 --finetune_iter=20 --lr=0.001 --random_seed=3 --split_time=1970 --eval_next_timesteps=10
+python main.py --dataset=yearbook --method=swav --mini_batch_size=32 --train_update_iter=80 --finetune_iter=20 --lr=0.001 --random_seed=1 --split_time=1970 --eval_next_timesteps=10
