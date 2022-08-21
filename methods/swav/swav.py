@@ -40,6 +40,9 @@ class SwaV(BaseTrainer):
             loss.backward()
             self.optimizer.step()
 
+            if step % 100 == 0:
+                print('step', step, 'loss', loss.item())
+
             if step == self.finetune_iter:
                 if self.scheduler is not None:
                     self.scheduler.step()
@@ -51,7 +54,6 @@ class SwaV(BaseTrainer):
         for step, (batch, _, _) in enumerate(dataloader):
             # Prepare data
             self.network.prototypes.normalize()
-            # (x0, x1), y = prepare_data(x, y, str(self.train_dataset))
 
             multi_crop_features = [self.network(x.cuda()) for x in batch]
             high_resolution = multi_crop_features[:2]
@@ -62,6 +64,9 @@ class SwaV(BaseTrainer):
             loss.backward()
             self.optimizer.step()
             self.optimizer.zero_grad()
+
+            if step % 100 == 0:
+                print('step', step, 'loss', loss.item())
 
             if step == self.train_update_iter:
                 if self.scheduler is not None:
