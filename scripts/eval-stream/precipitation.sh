@@ -13,6 +13,9 @@ python main.py --dataset=precipitation --method=erm --eval_next_timesteps=4 --mi
 #LISA
 python main.py --dataset=precipitation --method=erm --lisa --eval_next_timesteps=4 --mix_alpha=2.0 --mini_batch_size=128 --train_update_iter=500 --lr=0.001 --split_time=7 --random_seed=1 --log_dir=./checkpoints
 
+#Mixup
+python main.py --dataset=precipitation --method=erm --mixup --eval_next_timesteps=4 --mix_alpha=2.0 --mini_batch_size=128 --train_update_iter=500 --lr=0.001 --split_time=7 --random_seed=1 --log_dir=./checkpoints
+
 #A-GEM
 python main.py --dataset=precipitation --method=agem --buffer_size=1000 --eval_next_timesteps=4 --mini_batch_size=128 --train_update_iter=500 --lr=0.001 --split_time=7 --random_seed=1 --log_dir=./checkpoints
 
