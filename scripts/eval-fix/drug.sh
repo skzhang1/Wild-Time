@@ -13,6 +13,9 @@ python main.py --dataset=drug --method=erm --offline --lr=5e-5 --mini_batch_size
 #Task Difficulty
 python main.py --dataset=drug --method=erm --offline --lr=5e-5 --mini_batch_size=256 --train_update_iter=5000 --split_time=2016 --random_seed=1 --log_dir=./checkpoints --data_dir=./Data/Drug-BA --difficulty
 
+#Mixup
+python main.py --dataset=drug --method=erm --mixup --mix_alpha=2.0 --offline --lr=5e-5 --mini_batch_size=256 --train_update_iter=5000 --split_time=2016 --random_seed=1 --log_dir=./checkpoints --data_dir=./Data/Drug-BA
+
 #A-GEM
 python main.py --dataset=drug --method=agem --buffer_size=1000 --offline --lr=5e-5 --mini_batch_size=256 --train_update_iter=5000--split_time=2016 --random_seed=1 --log_dir=./checkpoints --data_dir=./Data/Drug-BA
 
