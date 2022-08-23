@@ -13,6 +13,9 @@ python main.py --dataset=huffpost --method=erm --eval_next_timesteps=3 --mini_ba
 #LISA
 python main.py --dataset=huffpost --method=erm --lisa --eval_next_timesteps=3 --mix_alpha=2.0 --mini_batch_size=32 --train_update_iter=1000 --lr=2e-5 --weight_decay=0.01 --split_time=2015 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
 
+#Mixup
+python main.py --dataset=huffpost --method=erm --mixup --eval_next_timesteps=3 --mix_alpha=2.0 --mini_batch_size=32 --train_update_iter=1000 --lr=2e-5 --weight_decay=0.01 --split_time=2015 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
+
 #A-GEM
 python main.py --dataset=huffpost --method=agem --buffer_size=1000 --mini_batch_size=16 --train_update_iter=1000 --lr=2e-5 --weight_decay=0.01 --eval_next_timesteps=3 --split_time=2015 --random_seed=1 --log_dir=./checkpoints
 
