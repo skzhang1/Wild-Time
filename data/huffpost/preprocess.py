@@ -73,7 +73,6 @@ def preprocess_orig(args):
     # Re-index the class ids that appear in all years 2012 - 2018 and store them
     classids_to_categories = {i: classids_to_categories[classid] for i, classid in enumerate(classids)}
     categories_to_classids = {v: k for k, v in classids_to_categories.items()}
-    print(categories_to_classids)
 
     dataset = {}
     for i, year in enumerate(years):

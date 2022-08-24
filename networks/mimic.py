@@ -1,11 +1,11 @@
-import ipdb
 import math
-from typing import List
-
-import torch.nn as nn
-import torch
-from networks.mimic_tokenizer import MIMICTokenizer
 import sys
+
+import torch
+import torch.nn as nn
+
+from networks.mimic_tokenizer import MIMICTokenizer
+
 sys.path.append('../tl4h_eicu')
 
 
@@ -122,9 +122,10 @@ class TransformerBlock(nn.Module):
 
 
 class Transformer(nn.Module):
-    def __init__(self, embedding_size: int, dropout: float, layers: int, heads: int, device='cpu'):
+    def __init__(self, args, embedding_size: int, dropout: float, layers: int, heads: int, device='cpu'):
         super(Transformer, self).__init__()
-        self.tokenizer = MIMICTokenizer()
+        self.args = args
+        self.tokenizer = MIMICTokenizer(args.data_dir)
         self.embedding_size = embedding_size
         self.dropout = dropout
         self.layers = layers

@@ -14,7 +14,6 @@ class SWA(BaseTrainer):
 
     def train_offline(self):
         for i, t in enumerate(self.train_dataset.ENV):
-            print(i, t)
             if t < self.split_time:
                 # Collate data from all time steps 1, ..., m-1
                 self.train_dataset.mode = Mode.TRAIN
@@ -36,26 +35,6 @@ class SWA(BaseTrainer):
                     self.save_model(t)
                     self.optimizer.update_swa()
                 break
-        self.optimizer.swap_swa_sgd()
-
-    def train_online(self):
-        for i, t in enumerate(self.train_dataset.ENV[:-1]):
-            if self.args.offline and t == self.split_time:
-                break
-            if self.args.load_model and self.model_path_exists(t):
-                self.load_model(t)
-            else:
-                if self.args.lisa and i == self.args.lisa_start_time:
-                    self.lisa = True
-                self.train_dataset.update_current_timestamp(t)
-                if self.args.method in ['simclr', 'swav']:
-                    self.train_dataset.ssl_training = True
-                train_dataloader = InfiniteDataLoader(dataset=self.train_dataset, weights=None, batch_size=self.mini_batch_size,
-                                                    num_workers=self.num_workers, collate_fn=self.train_collate_fn)
-                self.train_step(train_dataloader)
-                self.save_model(t)
-                if self.args.method in ['coral', 'groupdro', 'irm', 'erm']:
-                    self.train_dataset.update_historical(i + 1, data_del=True)
         self.optimizer.swap_swa_sgd()
 
     def __str__(self):

@@ -175,7 +175,7 @@ if __name__ == '__main__':
         optimizer = torch.optim.Adam(network.parameters(), lr=args.lr)
 
     elif args.dataset in ['mimic']:
-        network = Transformer(embedding_size=128, dropout=0.5, layers=2, heads=2).cuda()
+        network = Transformer(args, embedding_size=128, dropout=0.5, layers=2, heads=2).cuda()
         if args.prediction_type == 'readmission':
             class_weight = torch.FloatTensor(np.array([0.26, 0.74])).cuda()
         elif args.prediction_type == 'mortality':

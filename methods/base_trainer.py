@@ -146,7 +146,6 @@ class BaseTrainer:
             self.train_dataset.ssl_training = True
         for i, t in enumerate(self.train_dataset.ENV):
             if t < self.split_time:
-                # Collate data from all time steps 1, ..., m-1
                 self.train_dataset.mode = Mode.TRAIN
                 self.train_dataset.update_current_timestamp(t)
                 self.train_dataset.update_historical(i + 1)
@@ -156,7 +155,6 @@ class BaseTrainer:
             elif t == self.split_time:
                 self.train_dataset.mode = Mode.TRAIN
                 self.train_dataset.update_current_timestamp(t)
-                # Train
                 if self.args.method in ['simclr', 'swav']:
                     self.train_dataset.ssl_training = True
                 train_id_dataloader = InfiniteDataLoader(dataset=self.train_dataset, weights=None,
@@ -264,7 +262,6 @@ class BaseTrainer:
                 self.eval_dataset.update_current_timestamp(t)
                 self.eval_dataset.update_historical(i + 1, data_del=True)
             elif t == self.split_time:
-                # Evaluate on collated in-distribution timesteps
                 self.eval_dataset.mode = Mode.TEST_ID
                 self.eval_dataset.update_current_timestamp(t)
                 test_id_dataloader = FastDataLoader(dataset=self.eval_dataset,
@@ -273,7 +270,6 @@ class BaseTrainer:
                 acc = self.network_evaluation(test_id_dataloader)
                 print('ID accuracy:', acc)
             else:
-                # Evaluate out-of-distribution
                 self.eval_dataset.mode = Mode.TEST_OOD
                 self.eval_dataset.update_current_timestamp(t)
                 test_ood_dataloader = FastDataLoader(dataset=self.eval_dataset,
@@ -292,7 +288,6 @@ class BaseTrainer:
         acc_all = []
         for i, t in enumerate(timesteps):
             if t <= self.split_time:
-                # Evaluate each ID timestep
                 self.eval_dataset.mode = Mode.TEST_ID
                 self.eval_dataset.update_current_timestamp(t)
                 test_id_dataloader = FastDataLoader(dataset=self.eval_dataset,
@@ -300,7 +295,6 @@ class BaseTrainer:
                                                     num_workers=self.num_workers, collate_fn=self.eval_collate_fn)
                 acc = self.network_evaluation(test_id_dataloader)
             else:
-                # Evaluate each OOD timestep
                 self.eval_dataset.mode = Mode.TEST_OOD
                 self.eval_dataset.update_current_timestamp(t)
                 test_ood_dataloader = FastDataLoader(dataset=self.eval_dataset,
@@ -329,7 +323,6 @@ class BaseTrainer:
     def run_task_difficulty(self):
         timesteps = self.train_dataset.ENV
         acc_all = []
-        # Train on TRAIN_ID data from all timesteps
         for i, t in enumerate(timesteps):
             self.train_dataset.mode = Mode.TRAIN
             self.train_dataset.update_current_timestamp(t)
@@ -344,7 +337,7 @@ class BaseTrainer:
                 else:
                     self.train_step(train_id_dataloader)
                     self.save_model(t)
-        # Evaluate on held-out TEST_ID at each timestep
+
         for i, t in enumerate(timesteps):
             self.eval_dataset.mode = Mode.TEST_ID
             self.eval_dataset.update_current_timestamp(t)

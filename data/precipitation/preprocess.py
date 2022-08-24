@@ -101,11 +101,6 @@ class Partitioner():
         self.df.fact_time = self.df.fact_time.apply(lambda x: datetime.fromtimestamp(x))
         df_months = self.df.groupby(pd.Grouper(key='fact_time', freq='M'))
         self.dfs = [group for _, group in df_months]
-        num_nans = 0
-        for i, df in enumerate(self.dfs):
-            num_nans += self.dfs[i].shape[0] - self.dfs[i].dropna().shape[0]
-            self.dfs_to_save[i] = self.dfs[i].dropna()
-        print('num rows with NaN', num_nans)
         del df_months
 
     def _add_dummy(self, df_to_modify):
@@ -134,7 +129,6 @@ class Partitioner():
         precipitation_classes = {0.: 0, 10.: 1, 11.: 2, 12.: 3, 13.: 4, 20.: 5, 21.: 6, 22.: 7, 23.: 8}
         precipitation_dataset = {}
         for taskid in self.dfs_to_save.keys():
-            print(taskid, self.dfs_to_save[taskid].shape[0])
             # Skip month 0 which has few data points
             if taskid == 0:
                 continue
@@ -230,7 +224,6 @@ def preprocess_orig(args):
     for name, df in partitioner.dfs_to_save.items():
         print(name, df.shape[0])
 
-    print()
     # Save all files
     preprocessed_data_path = os.path.join(args.data_dir, 'precipitation.pkl')
     partitioner.save(preprocessed_data_path)
