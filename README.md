@@ -233,4 +233,4 @@ All code for Wild-Time is available under an open-source MIT license. We list th
 
 ## Acknowledgements
 
-We thank the authors of all baselines. Most of our implementations follow the corresponding original released versions. We thank Zhenbang Wu for his assistance in preprocessing the MIMIC-IV dataset.
+We thank the authors of all baselines. Most of our implementations follow the official implementations. We thank Zhenbang Wu for his assistance in preprocessing the MIMIC-IV dataset.
