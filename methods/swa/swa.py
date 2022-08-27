@@ -40,42 +40,39 @@ class SWA(BaseTrainer):
                 break
         self.optimizer.swap_swa_sgd()
 
-    def reverse_swap_swa_sgd(self):
-        opt = self.optimizer
-        for group in opt.param_groups:
-            for p in group['params']:
-                param_state = opt.state[p]
-                buf = param_state['swa_buffer']
-                if 'swa_buffer' not in param_state:
-                    # If swa wasn't applied we don't swap params
-                    warnings.warn(
-                        "SWA wasn't applied to param {}; skipping it".format(p))
-                    continue
-                tmp = torch.empty_like(buf)
-                tmp.copy_(buf)
-                buf.copy_(p.data)
-                p.data.copy_(tmp)
+    def get_optimizer_path(self, timestep):
+        model_str = f'{str(self.train_dataset)}_{str(self)}_time={timestep}'
+        path = os.path.join(self.args.log_dir, model_str, "_opt")
+        return path
 
-    def train_online(self):
-        for i, t in enumerate(self.train_dataset.ENV[:-1]):
-            if self.args.offline and t == self.split_time:
-                break
-            if self.args.load_model and self.model_path_exists(t):
-                self.load_model(t)
-            else:
-                if self.args.lisa and i == self.args.lisa_start_time:
-                    self.lisa = True
-                self.train_dataset.update_current_timestamp(t)
-                if self.args.method in ['simclr', 'swav']:
-                    self.train_dataset.ssl_training = True
-                train_dataloader = InfiniteDataLoader(dataset=self.train_dataset, weights=None, batch_size=self.mini_batch_size,
-                                                    num_workers=self.num_workers, collate_fn=self.train_collate_fn)
-                self.train_step(train_dataloader)
-                self.optimizer.swap_swa_sgd()
-                self.save_model(t)
-                self.reverse_swap_swa_sgd()
-                if self.args.method in ['coral', 'groupdro', 'irm', 'erm']:
-                    self.train_dataset.update_historical(i + 1, data_del=True)
+    def save_model(self, timestep):
+        model_path = self.get_model_path(timestep)
+        opt_path = self.get_optimizer_path(timestep)
+
+        torch.save(self.network.state_dict(), model_path)
+        torch.save(self.optimizer.state_dict(), opt_path)
+
+    def load_model(self, timestep):
+        model_path = self.get_model_path(timestep)
+        opt_path = self.get_optimizer_path(timestep)
+
+        self.network.load_state_dict(torch.load(model_path), strict=False)
+        self.optimizer.load_state_dict(torch.load(opt_path), strict=False)
+
+    def evaluate_online(self):
+        end = len(self.eval_dataset.ENV) - self.eval_next_timesteps
+        for i, t in enumerate(self.eval_dataset.ENV[:end]):
+            from copy import copy
+            model_checkpoint = copy.deepcopy(self.network)
+            self.load_model(t)
+            self.optimizer.swap_swa_sgd()
+
+            avg_acc, worst_acc, best_acc = self.evaluate_stream(i + 1)
+            self.task_accuracies[t] = avg_acc
+            self.worst_time_accuracies[t] = worst_acc
+            self.best_time_accuracies[t] = best_acc
+
+            self.network = model_checkpoint
 
     def __str__(self):
         return f'SWA-{self.base_trainer_str}'
