@@ -50,7 +50,6 @@ def get_image_idxs_and_labels(split: str, data_dir: str):
     y_array.append(dataset.y_array[split_idx])
     years = dataset.metadata_array[split_idx, 1]
     split_unique_years = torch.unique(years).detach().numpy().tolist()
-    print(split, split_unique_years)
 
     image_idxs = defaultdict(list)
     labels = defaultdict(list)
@@ -73,8 +72,6 @@ def get_train_test_split(image_idxs_year, labels_year):
     test_image_idxs = image_idxs_year[idxs[num_train_samples:]]
     test_labels = labels_year[idxs[num_train_samples:]]
 
-    print(type(train_image_idxs), type(train_labels))
-
     return train_image_idxs, train_labels, test_image_idxs, test_labels
 
 
@@ -85,7 +82,6 @@ def preprocess_orig(args):
     # test_id: 2002 - 2013
     # val_ood: 2013 - 2016
     # test_ood: 2016 - 2018
-    # self._split_names = {'train': 'Train', 'id_val': 'ID Val', 'id_test': 'ID Test', 'val': 'OOD Val', 'test': 'OOD Test'}
     datasets = {}
     train_image_idxs, train_labels = get_image_idxs_and_labels('train', args.data_dir)
     val_image_idxs, val_labels = get_image_idxs_and_labels('id_val', args.data_dir)
@@ -141,8 +137,6 @@ def preprocess_orig(args):
         datasets[year][Mode.TEST_OOD]['labels'] = test_ood_labels[year][0]
         del train_image_idxs, train_labels, test_image_idxs, test_labels
     del test_ood_image_idxs, test_ood_labels
-
-    print(datasets)
 
     preprocessed_data_path = os.path.join(args.data_dir, 'fmow.pkl')
     pickle.dump(datasets, open(preprocessed_data_path, 'wb'))

@@ -17,11 +17,11 @@ def to_index(sequence, vocab, prefix='', suffix=''):
 
 
 class MIMICTokenizer:
-    def __init__(self):
-        build_vocab_mimic()
-        self.vocab_dir = './Data/vocab.pkl'
+    def __init__(self, data_dir):
+        build_vocab_mimic(data_dir)
+        self.vocab_dir = os.path.join(data_dir, 'vocab.pkl')
         if not os.path.exists(self.vocab_dir):
-            build_vocab_mimic()
+            build_vocab_mimic(data_dir)
         self.code_vocabs, self.code_vocabs_size = self._load_code_vocabs()
         self.type_vocabs, self.type_vocabs_size = self._load_type_vocabs()
 

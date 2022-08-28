@@ -12,14 +12,14 @@ class MIMICBase(Dataset):
     def __init__(self, args):
         super().__init__()
 
+        self.args = args
         preprocess(args)
         if args.reduced_train_prop is None:
-            self.data_file = f'{str(self)}_preprocessed_{args.prediction_type}.pkl'
+            self.data_file = f'{str(self)}_preprocessed.pkl'
         else:
-            self.data_file = f'{str(self)}_preprocessed_{args.prediction_type}_{args.reduced_train_prop}.pkl'
+            self.data_file = f'{str(self)}_preprocessed_{args.reduced_train_prop}.pkl'
         self.datasets = pickle.load(open(os.path.join(args.data_dir, self.data_file), 'rb'))
 
-        self.args = args
         self.num_classes = 2
         self.current_time = 0
         self.mini_batch_size = args.mini_batch_size
@@ -103,7 +103,7 @@ class MIMICBase(Dataset):
         pass
 
     def __str__(self):
-        return 'mimic'
+        return f'mimic_{self.args.prediction_type}'
 
 
 class MIMIC(MIMICBase):

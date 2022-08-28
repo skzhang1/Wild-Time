@@ -70,7 +70,6 @@ def preprocess_reduced_train_set(args):
     task_idxs = {}
     for year in years:
         train_data = dataset[year][Mode.TRAIN]
-        print(train_data)
         if year != 2019:
             start_idx = end_idx
             end_idx = start_idx + len(train_data)

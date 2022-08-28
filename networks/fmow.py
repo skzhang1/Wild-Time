@@ -4,6 +4,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torchvision.models import densenet121
+import math
 
 IMG_HEIGHT = 224
 NUM_CLASSES = 62
@@ -32,14 +33,35 @@ class FMoWNetwork(nn.Module):
         self.load_state_dict(deepcopy(weights))
 
     def forward(self, x):
+        if torch.isnan(x).any():
+            raise ValueError('nan in input x')
         features = self.enc(x)
+        if torch.isnan(features).any():
+            raise ValueError('nan in features')
         out = F.relu(features, inplace=True)
+        if torch.isnan(out).any():
+            raise ValueError('nan in relu')
         out = F.adaptive_avg_pool2d(out, (1, 1))
+        if torch.isnan(out).any():
+            raise ValueError('nan in adaptive avg pool2d')
         out = torch.flatten(out, 1)
+        if torch.isnan(out).any():
+            raise ValueError('nan in flatten')
 
         if self.args.method == 'simclr' and self.ssl_training:
             return self.projection_head(out)
         elif self.args.method == 'swav' and self.ssl_training:
-            return self.projection_head(out)
+            if torch.isnan(out).any():
+                raise ValueError('error in early part')
+            out = self.projection_head(out)
+            if torch.isnan(out).any():
+                raise ValueError('error in projection_head')
+            out = nn.functional.normalize(out, dim=1, p=2)
+            if torch.isnan(out).any():
+                raise ValueError('error in normalize')
+            out = self.prototypes(out)
+            if torch.isnan(out).any():
+                raise ValueError('error in prototypes')
+            return out
         else:
             return self.classifier(out)

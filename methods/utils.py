@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import matplotlib.pyplot as plt
 import torch
 from torch.autograd import Variable
 
@@ -16,7 +15,7 @@ def prepare_data(x, y, dataset_name: str):
         x['categorical'] = x['categorical'].cuda()
         x['continuous'] = x['continuous'].cuda()
         y = y.cuda()
-    elif dataset_name == 'mimic':
+    elif 'mimic' in dataset_name:
         y = torch.cat(y).type(torch.LongTensor).cuda()
     elif dataset_name in ['arxiv', 'huffpost']:
         x = x.to(dtype=torch.int64).cuda()

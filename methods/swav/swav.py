@@ -1,5 +1,6 @@
 import os
 
+import torch
 from lightly.loss import SwaVLoss
 
 from dataloaders import InfiniteDataLoader
@@ -34,11 +35,17 @@ class SwaV(BaseTrainer):
             x, y = prepare_data(x, y, str(self.train_dataset))
             loss, logits, y = forward_pass(x, y, self.train_dataset, self.network, self.criterion, self.lisa, self.mixup,
                                            self.cut_mix, self.mix_alpha)
-            loss_all.append(loss.item())
 
-            self.optimizer.zero_grad()
+            if torch.isnan(loss).any():
+                raise ValueError('nan in finetune')
+
+            loss_all.append(loss.item())
             loss.backward()
             self.optimizer.step()
+            self.optimizer.zero_grad()
+
+            if step % 100 == 0:
+                print('step', step, 'loss', loss.item())
 
             if step == self.finetune_iter:
                 if self.scheduler is not None:
@@ -49,9 +56,11 @@ class SwaV(BaseTrainer):
         self.network.train()
         loss_all = []
         for step, (batch, _, _) in enumerate(dataloader):
-            # Prepare data
             self.network.prototypes.normalize()
-            # (x0, x1), y = prepare_data(x, y, str(self.train_dataset))
+
+            for x in batch:
+                if torch.isnan(self.network(x.cuda())).any():
+                    raise ValueError('nan error in train_step')
 
             multi_crop_features = [self.network(x.cuda()) for x in batch]
             high_resolution = multi_crop_features[:2]
@@ -62,6 +71,9 @@ class SwaV(BaseTrainer):
             loss.backward()
             self.optimizer.step()
             self.optimizer.zero_grad()
+
+            if step % 100 == 0:
+                print('step', step, 'loss', loss.item())
 
             if step == self.train_update_iter:
                 if self.scheduler is not None:

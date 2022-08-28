@@ -96,9 +96,7 @@ def preprocess_orig(args):
         num_train_images = int((1 - ID_HELD_OUT) * num_samples)
         idxs = np.random.permutation(np.arange(num_samples))
         train_idxs = idxs[:num_train_images].astype(int)
-        print(train_idxs)
         test_idxs = idxs[num_train_images:].astype(int)
-        print(test_idxs)
         train_images = np.array(images[year])[train_idxs]
         train_labels = np.array(labels[year])[train_idxs]
         test_images = np.array(images[year])[test_idxs]
