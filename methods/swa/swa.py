@@ -1,8 +1,13 @@
+import copy
 import os
+
+import torch
 from torchcontrib.optim import SWA as SWA_optimizer
-from methods.base_trainer import BaseTrainer
+
 from data.utils import Mode
 from dataloaders import InfiniteDataLoader
+from methods.base_trainer import BaseTrainer
+
 
 class SWA(BaseTrainer):
     def __init__(self, args, dataset, network, criterion, optimizer, scheduler):
@@ -14,6 +19,7 @@ class SWA(BaseTrainer):
 
     def train_offline(self):
         for i, t in enumerate(self.train_dataset.ENV):
+            print(i, t)
             if t < self.split_time:
                 # Collate data from all time steps 1, ..., m-1
                 self.train_dataset.mode = Mode.TRAIN
@@ -36,6 +42,39 @@ class SWA(BaseTrainer):
                     self.optimizer.update_swa()
                 break
         self.optimizer.swap_swa_sgd()
+
+    def get_optimizer_path(self, timestep):
+        model_str = f'{str(self.train_dataset)}_{str(self)}_time={timestep}'
+        path = os.path.join(self.args.log_dir, f"{model_str}_opt")
+        return path
+
+    def save_model(self, timestep):
+        model_path = self.get_model_path(timestep)
+        opt_path = self.get_optimizer_path(timestep)
+
+        torch.save(self.network.state_dict(), model_path)
+        torch.save(self.optimizer.state_dict(), opt_path)
+
+    def load_model(self, timestep):
+        model_path = self.get_model_path(timestep)
+        opt_path = self.get_optimizer_path(timestep)
+
+        self.network.load_state_dict(torch.load(model_path), strict=False)
+        self.optimizer.load_state_dict(torch.load(opt_path), strict=False)
+
+    def evaluate_online(self):
+        end = len(self.eval_dataset.ENV) - self.eval_next_timesteps
+        for i, t in enumerate(self.eval_dataset.ENV[:end]):
+            model_checkpoint = copy.deepcopy(self.network)
+            self.load_model(t)
+            self.optimizer.swap_swa_sgd()
+
+            avg_acc, worst_acc, best_acc = self.evaluate_stream(i + 1)
+            self.task_accuracies[t] = avg_acc
+            self.worst_time_accuracies[t] = worst_acc
+            self.best_time_accuracies[t] = best_acc
+
+            self.network = model_checkpoint
 
     def __str__(self):
         return f'SWA-{self.base_trainer_str}'
