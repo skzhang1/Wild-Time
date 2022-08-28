@@ -41,13 +41,13 @@ class SWA(BaseTrainer):
         self.optimizer.swap_swa_sgd()
 
     def save_swa_model(self, timestep):
-        model_checkpoint = copy.deepcopy(self.network)
+        backup_state_dict = self.network.state_dict()
 
         self.optimizer.swap_swa_sgd()
         swa_model_path = self.get_model_path(timestep) + "_swa"
         torch.save(self.network.state_dict(), swa_model_path)
 
-        self.network = model_checkpoint
+        self.network.load_state_dict(backup_state_dict)
 
     def load_swa_model(self, timestep):
         swa_model_path = self.get_model_path(timestep) + "_swa"
