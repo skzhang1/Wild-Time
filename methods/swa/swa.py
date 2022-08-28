@@ -1,10 +1,13 @@
-import os
 import copy
+import os
+
 import torch
 from torchcontrib.optim import SWA as SWA_optimizer
-from methods.base_trainer import BaseTrainer
+
 from data.utils import Mode
 from dataloaders import InfiniteDataLoader
+from methods.base_trainer import BaseTrainer
+
 
 class SWA(BaseTrainer):
     def __init__(self, args, dataset, network, criterion, optimizer, scheduler):
