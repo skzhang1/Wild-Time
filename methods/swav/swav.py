@@ -36,9 +36,6 @@ class SwaV(BaseTrainer):
             loss, logits, y = forward_pass(x, y, self.train_dataset, self.network, self.criterion, self.lisa, self.mixup,
                                            self.cut_mix, self.mix_alpha)
 
-            if torch.isnan(loss).any():
-                raise ValueError('nan in finetune')
-
             loss_all.append(loss.item())
             loss.backward()
             self.optimizer.step()
@@ -57,10 +54,6 @@ class SwaV(BaseTrainer):
         loss_all = []
         for step, (batch, _, _) in enumerate(dataloader):
             self.network.prototypes.normalize()
-
-            for x in batch:
-                if torch.isnan(self.network(x.cuda())).any():
-                    raise ValueError('nan error in train_step')
 
             multi_crop_features = [self.network(x.cuda()) for x in batch]
             high_resolution = multi_crop_features[:2]
