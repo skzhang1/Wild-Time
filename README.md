@@ -215,7 +215,7 @@ In `scripts/`, we provide a set of scripts that can be used to train and evaluat
 All Eval-Fix scripts can be found located under `scripts/eval-fix`. All Eval-Stream scripts are located under under `scripts/eval-stream`.
 
 ## Checkpoints
-In `model_checkpoints/`, we provide pretrained model checkpoints for all baselines used in our paper under the Eval-Fix setting. 
+We provide pretrained model checkpoints for all baselines used in our paper under the Eval-Fix setting. Please download the checkpoints [here](https://drive.google.com/drive/folders/1h_pvX4mhzVEddxenP-RkFl8yjKbl8FUN?usp=sharing) and put them under `model_checkpoints/`.
 
 To use these checkpoints, add the flags `--load_model --log_dir=./model_checkpoints` to your command.
 
@@ -233,4 +233,4 @@ All code for Wild-Time is available under an open-source MIT license. We list th
 
 ## Acknowledgements
 
-We thank the authors of all baselines. Most of our implementations follow the corresponding original released versions. We thank Zhenbang Wu for his assistance in preprocessing the MIMIC-IV dataset.
+We thank the authors of all baselines. Most of our implementations follow the official implementations. We thank Zhenbang Wu for his assistance in preprocessing the MIMIC-IV dataset.
