@@ -215,7 +215,7 @@ In `scripts/`, we provide a set of scripts that can be used to train and evaluat
 All Eval-Fix scripts can be found located under `scripts/eval-fix`. All Eval-Stream scripts are located under under `scripts/eval-stream`.
 
 ## Checkpoints
-In `model_checkpoints/`, we provide pretrained model checkpoints for all baselines used in our paper under the Eval-Fix setting. 
+We provide pretrained model checkpoints for all baselines used in our paper under the Eval-Fix setting. Please download the checkpoints [here](https://drive.google.com/drive/folders/1h_pvX4mhzVEddxenP-RkFl8yjKbl8FUN?usp=sharing) and put them under `model_checkpoints/`.
 
 To use these checkpoints, add the flags `--load_model --log_dir=./model_checkpoints` to your command.
 
