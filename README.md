@@ -15,7 +15,7 @@ If you find this repository useful in your research, please cite the following p
 @inproceedings{yao2022wildtime,
   title={Wild-Time: A Benchmark of in-the-Wild Distribution Shift over Time},
   author={Huaxiu Yao and Caroline Choi and Yoonho Lee and Pang Wei Koh and Chelsea Finn},
-  booktitle={ICML 2022 Shift Happens Workshop},
+  booktitle={Proceedings of the Thirty-sixth Conference on Neural Information Processing Systems Datasets & Benchmarks Track},
   year={2022},
 }
 ```
