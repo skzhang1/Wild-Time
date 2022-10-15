@@ -48,7 +48,7 @@ def download_fmow(data_dir):
 
 def download_huffpost(data_dir):
     download_gdrive(
-        url='https://drive.google.com/file/d/17Jplcs6QSCZb5pmE8xDKKwQZnrjBClsf/view?usp=sharing',
+        url='https://drive.google.com/file/d/17Jp9CiEG69zOjAnqCK0sHu8SeWQ76uPd/view?usp=sharing',
         save_path=os.path.join(data_dir, 'huffpost.pkl'),
         is_folder=False
     )
