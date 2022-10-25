@@ -3,7 +3,7 @@
 **Note**: This is a preliminary version of the Wild-Time benchmark. We are working on code refactoring and will release the final version in October
 
 ## Overview
-Distribution shifts occur when the test distribution differs from the training distribution, and can considerably degrade performance of machine learning models deployed in the real world. While recent works have studied robustness to distribution shifts, distribution shifts arising from the passage of time have the additional structure of timestamp metadata. Real-world examples of such shifts are underexplored, and it is unclear whether existing models can leverage trends in past distribution shifts to reliably extrapolate into the future. To address this gap, we curate Wild-Time, a benchmark of 7 datasets that reflect temporal distribution shifts arising in a variety of real-world applications, including drug discovery, patient prognosis, and news classification.
+Distribution shifts occur when the test distribution differs from the training distribution, and can considerably degrade performance of machine learning models deployed in the real world. While recent works have studied robustness to distribution shifts, distribution shifts arising from the passage of time have the additional structure of timestamp metadata. Real-world examples of such shifts are underexplored, and it is unclear whether existing models can leverage trends in past distribution shifts to reliably extrapolate into the future. To address this gap, we curate Wild-Time, a benchmark of 5 datasets that reflect temporal distribution shifts arising in a variety of real-world applications, including drug discovery, patient prognosis, and news classification.
 
 ![Wild-Time -- Dataset Description](data_description.png)
 
@@ -55,10 +55,10 @@ In the directory `Wild-Time`, create the folders `Data`, `checkpoints`, and `res
 
 Create the folder `Wild-Time/Data`.
 
-To download the MIMIC-WildT dataset, users must be credentialed on PhysioNet and sign the Data Use Agreement due to data use resstrictions.
+To download the MIMIC dataset, users must be credentialed on PhysioNet and sign the Data Use Agreement due to data use resstrictions.
 Please refer to the next section for instructions.
 
-If you do not need to download the MIMIC-WildT dataset, you can skip the next section and simply run the command `python download_datasets.py --datasets=arxiv, drug, fmow, huffpost, precipitation, yearbook`.
+If you do not need to download the MIMIC dataset, you can skip the next section and simply run the command `python download_datasets.py --datasets=arxiv, drug, fmow, huffpost, yearbook`.
 
 ### Accessing the MIMIC-IV dataset
 
@@ -77,7 +77,7 @@ If you do not need to download the MIMIC-WildT dataset, you can skip the next se
     - diagnoses_icd.csv
     - procedures_icd.csv
    Decompress the files and put them under `./Data`.
-5. Run the command `python download_datasets.py --datasets=arxiv, drug, fmow, huffpost, precipitation, yearbook, mimic`.
+5. Run the command `python download_datasets.py --datasets=arxiv, drug, fmow, huffpost, yearbook, mimic`.
 
 
 ## Running baselines
