@@ -88,7 +88,7 @@ python main.py --dataset=[DATASET] --method=[BASELINE] --lr=[LEARNING RATE] --tr
 ```
 
 - Specify the dataset with `--dataset`.
-  - [arxiv, drug, fmow, huffpost, mimic, precipitation, yearbook]
+  - [arxiv, drug, fmow, huffpost, mimic, yearbook]
   - For MIMIC, specify one of two prediction tasks (mortality and readmission) using`--prediction_type=mortality` or `--prediction_type=readmission`.
 - Specify the baseline with `--method`.
 - To run Eval-Fix, add the flag `--offline`.
@@ -158,7 +158,7 @@ python main.py --dataset=mimic --method=erm --offline --mixup --mix_alpha=2.0 --
 
 Example command:
 ```
-python main.py --dataset=precipitation --method=agem --buffer_size=1000 --offline --mini_batch_size=128 --train_update_iter=5000 --lr=0.001 --split_time=7 --random_seed=1 --log_dir=./checkpoints
+python main.py --dataset=yearbook --method=agem --buffer_size=1000 --offline --mini_batch_size=128 --train_update_iter=5000 --lr=0.001 --split_time=1970 --random_seed=1 --log_dir=./checkpoints
 ```
 
 ### (Online) Elastic Weight Consolidation (EWC)
@@ -226,7 +226,6 @@ All code for Wild-Time is available under an open-source MIT license. We list th
 - FMoW: [The Functional Map of the World Challenge Public License](https://raw.githubusercontent.com/fMoW/dataset/master/LICENSE)
 - MIMIC-IV (Readmission and Mortality): [PhysioNet Credentialed Health Data License 1.5.0](https://physionet.org/content/mimiciv/view-license/0.4/)
 - Drug-BA: MIT License
-- Precipitation: CC BY-NC 4.0
 - Huffpost: CC0: Public Domain
 - arXiv: CC0: Public Domain
 
