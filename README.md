@@ -1,91 +1,86 @@
 # Wild-Time: A Benchmark of in-the-Wild Distribution Shifts over Time
 
-**Note**: This is a preliminary version of the Wild-Time benchmark. We are working on code refactoring and will release the final version in October
-
 ## Overview
-Distribution shifts occur when the test distribution differs from the training distribution, and can considerably degrade performance of machine learning models deployed in the real world. While recent works have studied robustness to distribution shifts, distribution shifts arising from the passage of time have the additional structure of timestamp metadata. Real-world examples of such shifts are underexplored, and it is unclear whether existing models can leverage trends in past distribution shifts to reliably extrapolate into the future. To address this gap, we curate Wild-Time, a benchmark of 5 datasets that reflect temporal distribution shifts arising in a variety of real-world applications, including drug discovery, patient prognosis, and news classification.
+Distribution shift occurs when the test distribution differs from the training distribution, and it can considerably degrade performance of machine learning models deployed in the real world. Temporal shifts -- distribution shifts arising from the passage of time -- often occur gradually and have the additional structure of timestamp metadata. By leveraging timestamp metadata, models can potentially learn from trends in past distribution shifts and extrapolate into the future. While recent works have studied distribution shifts, temporal shifts remain underexplored. To address this gap, we curate Wild-Time, a benchmark of 5 datasets that reflect temporal distribution shifts arising in a variety of real-world applications, including patient prognosis and news classification.
 
 ![Wild-Time -- Dataset Description](data_description.png)
 
-This repo includes scripts to download all Wild-Time datasets, code for all baselines, and scripts for training and evaluating these baselines on Wild-Time datasets.
+This repo includes scripts to download the Wild-Time datasets, code for baselines, and scripts for training and evaluating these baselines on Wild-Time.
 
 If you find this repository useful in your research, please cite the following paper:
 
 ```
-@inproceedings{yao2022wildtime,
+@inproceedings{yao2022wild,
   title={Wild-Time: A Benchmark of in-the-Wild Distribution Shift over Time},
-  author={Huaxiu Yao and Caroline Choi and Yoonho Lee and Pang Wei Koh and Chelsea Finn},
-  booktitle={Proceedings of the Thirty-sixth Conference on Neural Information Processing Systems Datasets and Benchmarks Track},
-  year={2022},
+  author={Yao, Huaxiu and Choi, Caroline and Cao, Bochuan and Lee, Yoonho and Koh, Pang Wei and Finn, Chelsea},
+  booktitle={Thirty-sixth Conference on Neural Information Processing Systems Datasets and Benchmarks Track},
+  year={2022}
 }
 ```
 
 We will release the arXiv version of our paper, along with the final code repository, in 1-2 months.
 
 ## Installation
-To download the Wild-Time datasets and run baselines, clone this repo to your local machine.
+To use our code, you first need to install your own version of pytorch, with version > 1.7.1 .
+
+Then, you can use pip to install wildtime directly:
 
 ```
-git clone git@github.com:huaxiuyao/Wild-Time.git
-cd Wild-Time
-pip install -r requirements.txt
+pip install wildtime==1.1.0
 ```
-In the directory `Wild-Time`, create the folders `Data`, `checkpoints`, and `results`.
-
-### Dependencies
-
-- gdown==4.5.1
-- lightly==1.2.27
-- matplotlib==3.5.0
-- numpy==1.19.5
-- omegaconf==2.0.6
-- pandas==1.1.3
-- Pillow==9.2.0
-- pytorch_lightning==1.2.7
-- pytorch_tabular==0.7.0
-- scikit_learn==1.1.2
-- tdc==0.1
-- torch==1.7.0
-- torchcontrib==0.0.2
-- torchvision==0.8.1
-- transformers==4.21.1
-- wilds==2.0.0
-
-### Downloading the Wild-Time datasets
-
-Create the folder `Wild-Time/Data`.
-
-To download the MIMIC dataset, users must be credentialed on PhysioNet and sign the Data Use Agreement due to data use resstrictions.
-Please refer to the next section for instructions.
-
-If you do not need to download the MIMIC dataset, you can skip the next section and simply run the command `python download_datasets.py --datasets=arxiv, drug, fmow, huffpost, yearbook`.
+If you want to run a baseline test, please create a folder named `checkpoints` in your working directory.
 
 ### Accessing the MIMIC-IV dataset
 
 1. Become a credentialed user on PhysioNet. This means that you must formally submit your personal details for review, so that PhysioNet can confirm your identity.
   - If you do not have a PhysioNet account, register for one [here](https://physionet.org/register/).
-  - Follow these [instructions](https://physionet.org/settings/credentialing/}{instructions) for credentialing on PhysioNet.
+  - Follow these [instructions](https://physionet.org/credential-application/) for credentialing on PhysioNet.
   - Complete the "Data or Specimens Only Research" [training course](https://physionet.org/about/citi-course/).
 2. Sign the data use agreement.
   - [Log in](https://physionet.org/login/) to your PhysioNet account.
   - Go to the MIMIC-IV dataset [project page](https://physionet.org/content/mimiciv/2.0/).
   - Locate the "Files" section in the project description.
   - Click through, read, and sign the Data Use Agreement (DUA).
-4. Go to https://physionet.org/content/mimiciv/1.0/ and download the following CSV files from the "core" and "hosp" modules to `./Data`:
+3. Go to https://physionet.org/content/mimiciv/1.0/ and download the following CSV files from the "core" and "hosp" modules to `./Data`:
     - patients.csv
     - admissions.csv
     - diagnoses_icd.csv
     - procedures_icd.csv
-   Decompress the files and put them under `./Data`.
-5. Run the command `python download_datasets.py --datasets=arxiv, drug, fmow, huffpost, yearbook, mimic`.
+4. Decompress the files and put them under `./Data`.
 
+## Run the code
 
-## Running baselines
-
-To train a baseline on a Wild-Time dataset and evaluate under Eval-Fix (default evaluation), use the command
+### Importing dependencies
+To load the wildtime data, you first need to import the dependencies:
 ```
-python main.py --dataset=[DATASET] --method=[BASELINE] --lr=[LEARNING RATE] --train_update_iters=[TRAIN ITERS] --num_workers=[WORKERS] --random_seed=[SEED] --offline --split_time=[TIME STEP] [BASELINE-SPECIFIC HYPERPARAMETERS]
+import argparse
+from configs import configs
+configs = argparse.Namespace(**configs)
 ```
+Where configs are parameters that contain the imported dataset. Importing datasets requires specifying the following parameters:
+```
+'dataset': 'yearbook', # Name of the dataset that you want to load, choices=['arxiv', 'drug', 'huffpost', 'mimic', 'fmow', 'yearbook']
+'device': 0,  # gpu id
+'random_seed': 1,  # random seed value
+```
+### Loading Wild-Time datasets
+You can then use the following code to load the dataset:
+```
+from WildTime import dataloader
+data = dataloader.getdata(configs)
+```
+If you want to load data of type Group, please set the parameter 'is_group_data' to 'True', here is an example:
+```
+data = dataloader.getdata(configs, is_group_data=True)
+```
+### Running baselines
+
+To train a baseline on a Wild-Time dataset and evaluate under Eval-Fix (default evaluation), use the code:
+```
+from WildTime import baseline_trainer
+baseline_trainer.train(configs)
+```
+Specify parameters in the config as follows:
 
 - Specify the dataset with `--dataset`.
   - [arxiv, drug, fmow, huffpost, mimic, yearbook]
@@ -98,121 +93,58 @@ python main.py --dataset=[DATASET] --method=[BASELINE] --lr=[LEARNING RATE] --tr
 - Set the number of training iterations with `--train_update_iters`.
 - [Optional] If using a data directory or checkpoint directory other than `./Data` and `./checkpoints`, specify their paths with `--data_dir` and `--log_dir`. 
 
-### CORAL
+#### CORAL
 - Set the number of groups (e.g., number of time windows) with `--num_groups`.
 - Set the group size (e.g., length of each time window) with `--group_size`.
 - Specify the weight of the CORAL loss with `--coral_lambda` (default: 1.0).
 - Add `--non_overlapping` to sample from non-overlapping time windows.
-
-Example command:
-```
-python main.py --dataset=arxiv --method=coral --offline --split_time=2016 --coral_lambda=0.9 --num_groups=4 --group_size=4 --mini_batch_size=64 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
-```
 
 #### GroupDRO
 - Set the number of groups (e.g., number of time windows) with `--num_groups`.
 - Set the group size (e.g., length of each time window) with `--group_size`.
 - Add `--non_overlapping` to sample from non-overlapping time windows.
 
-Example command:
-```
-python main.py --dataset=drug --method=groupdro --offline --split_time=2016 --num_groups=3 --group_size=2 --mini_batch_size=256 --train_update_iter=5000 --lr=2e-5 --random_seed=1 --log_dir=./checkpoints --data_dir=./Data/Drug-BA
-```
-
-### IRM
+#### IRM
 - Set the number of groups (e.g., number of time windows) with `--num_groups`.
 - Set the group size (e.g., length of each time window) with `--group_size`.
 - Specify the weight of the IRM penalty loss with `--irm_lambda` (default: 1.0)
 - Specify the number of iterations after which to anneal the IRM penalty loss wtih `--irm_penalty_anneal_iters` (default: 0).
 
-Example command:
-```
-python main.py --dataset=fmow --method=irm --offline --irm_lambda=1.0 --irm_penalty_anneal_iters=0 --num_groups=3 --group_size=3 --mini_batch_size=64 --train_update_iter=3000 --lr=1e-4 --weight_decay=0.0 --split_time=10 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
-```
+#### ERM
 
-### ERM
-
-Example command:
-```
-python main.py --dataset=huffpost --method=erm --offline --mini_batch_size=32 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --split_time=2015 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
-```
-
-### LISA
+#### LISA
 - Specify the interpolation ratio $\lambda \sim Beta(\alpha, \alpha)$ with `--mix_alpha` (default: 2.0).
 
-Example command:
-```
-python main.py --dataset=mimic --method=erm --offline --lisa --mix_alpha=2.0 --prediction_type=mortality --mini_batch_size=128 --train_update_iter=3000 --lr=5e-4 --num_workers=0 --random_seed=1 --split_time=2013 --data_dir=./Data --log_dir=./checkpoints/
-```
-
-### Mixup
+#### Mixup
 - Specify the interpolation ratio $\lambda \sim Beta(\alpha, \alpha)$ with `--mix_alpha` (default: 2.0).
 
-Example command:
-```
-python main.py --dataset=mimic --method=erm --offline --mixup --mix_alpha=2.0 --prediction_type=readmission --mini_batch_size=128 --train_update_iter=3000 --lr=5e-4 --num_workers=0 --random_seed=1 --split_time=2013 --data_dir=./Data --log_dir=./checkpoints/
-```
-
-### Averaged Gradient Episodic Memory (A-GEM)
+#### Averaged Gradient Episodic Memory (A-GEM)
 - Set the buffer size with `--buffer_size` (default: 1000).
 
-Example command:
-```
-python main.py --dataset=yearbook --method=agem --buffer_size=1000 --offline --mini_batch_size=128 --train_update_iter=5000 --lr=0.001 --split_time=1970 --random_seed=1 --log_dir=./checkpoints
-```
-
-### (Online) Elastic Weight Consolidation (EWC)
+#### (Online) Elastic Weight Consolidation (EWC)
 - Set the regularization strength (e.g., weight of the EWC loss) with `ewc_lambda` (default: 1.0). 
 
-Sample command:
-```
-python main.py --dataset=yearbook --method=ewc --ewc_lambda=0.5 --online --mini_batch_size=32 --train_update_iter=3000 --lr=0.001 --offline --split_time=1970 --random_seed=1 --log_dir=./checkpoints
-```
+#### Fine-tuning (FT)
 
-### Fine-tuning (FT)
-Example command:
-```
-python main.py --dataset=arxiv --method=ft --mini_batch_size=64 --train_update_iter=1000 --lr=2e-5 --weight_decay=0.01 --offline --split_time=2016 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
-```
-
-### Synaptic Intelligence (SI)
+#### Synaptic Intelligence (SI)
 - Set the SI regularization strength with `--si_c` (default: 0.1).
 - Set the dampening parameter with `--epsilon` (default: 0.001).
 
-Example command:
-```
-python main.py --dataset=drug --method=si --si_c=0.1 --epsilon=0.001 --lr=5e-5 --mini_batch_size=256 --train_update_iter=5000 --split_time=2016 --random_seed=1 --log_dir=./checkpoints --data_dir=./Data/Drug-BA
-```
-
-### SimCLR
+#### SimCLR
 - Specify the number of iterations for which to learn representations using SimCLR with `--train_update_iter`.
 - Specify the number of iterations to finetune the classifier with `--finetune_iter`.
 
-Example command:
-```
-python main.py --dataset=fmow --method=simclr --offline --mini_batch_size=64 --train_update_iter=1500 --finetune_iter=1500 --lr=1e-4 --weight_decay=0.0 --split_time=13 --num_workers=8 --random_seed=1
-```
-
-### SwaV
+#### SwaV
 - Specify the number of iterations for which to learn representations using SimCLR with `--train_update_iter`.
 - Specify the number of iterations to finetune the classifier with `--finetune_iter`.
 
-Example command:
-```
-python main.py --dataset=yearbook --method=swav --mini_batch_size=32 --train_update_iter=2700 --finetune_iter=300 --lr=0.001 --offline --random_seed=1 --split_time=1970
-```
+#### Stochastic Weighted Averaging (SWA)
 
-### Stochastic Weighted Averaging (SWA)
-
-Example command:
-```
-python main.py --dataset=huffpost --method=swa --offline --mini_batch_size=32 --train_update_iter=6000 --lr=2e-5 --weight_decay=0.01 --split_time=2015 --num_workers=8 --random_seed=1 --log_dir=./checkpoints
-```
 
 ## Scripts
-In `scripts/`, we provide a set of scripts that can be used to train and evaluate models on the Wild-Time datasets. These scripts contain the hyperparameter settings used to benchmark the baselines in our paper.
+In `configs/`, we provide a set of configs that can be used to train and evaluate models on the Wild-Time datasets. These scripts contain the hyperparameter settings used to benchmark the baselines in our paper.
 
-All Eval-Fix scripts can be found located under `scripts/eval-fix`. All Eval-Stream scripts are located under under `scripts/eval-stream`.
+All Eval-Fix scripts can be found located under `configs/eval-fix`. All Eval-Stream scripts are located under under `configs/eval-stream`.
 
 ## Checkpoints
 For your reference, we provide some checkpoints for baselines used in our paper under the Eval-Fix setting. Please download the checkpoints [here](https://drive.google.com/drive/folders/1h_pvX4mhzVEddxenP-RkFl8yjKbl8FUN?usp=sharing) and put them under `model_checkpoints/`.
