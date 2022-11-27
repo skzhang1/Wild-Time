@@ -26,7 +26,7 @@ To use our code, you first need to install your own version of pytorch, with ver
 Then, you can use pip to install wildtime directly:
 
 ```
-pip install wildtime==1.1.0
+pip install wildtime==1.1.3
 ```
 If you want to run a baseline test, please create a folder named `checkpoints` in your working directory.
 
