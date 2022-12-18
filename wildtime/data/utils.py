@@ -39,7 +39,7 @@ def download_arxiv(data_dir):
 
 def download_drug(data_dir):
     download_gdrive(
-        url='https://drive.google.com/uc?export=download&id=1Nsn1wl-llp52PTkFwMrIqqbuHYutw0P9',
+        url='https://drive.google.com/uc?export=download&id=12SmQXA6f1fPd9__WAY8lravVAlDsFP7p',
         save_path=os.path.join(data_dir, 'drug_preprocessed.pkl'),
         is_folder=False
     )
