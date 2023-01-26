@@ -19,6 +19,9 @@ class BaseTrainer:
         self.criterion = criterion
         self.scheduler = scheduler
 
+        # HPO experiment
+        self.train_type = args.train_type # 0: default 1: hold_out cross_validation
+
         # Dataset settings
         self.train_dataset = dataset
         self.train_dataset.mode = 0
@@ -120,6 +123,7 @@ class BaseTrainer:
                 self.train_dataset.update_current_timestamp(timestamp)
                 if self.args.method in ['simclr', 'swav']:
                     self.train_dataset.ssl_training = True
+                # print(len(self.train_dataset))
                 train_id_dataloader = InfiniteDataLoader(dataset=self.train_dataset, weights=None,
                                                          batch_size=self.mini_batch_size,
                                                          num_workers=self.num_workers, collate_fn=self.train_collate_fn)
@@ -156,6 +160,10 @@ class BaseTrainer:
             pred_all = np.array(pred_all)
             y_all = np.array(y_all)
             if self.args.dataset == 'mimic' and self.args.prediction_type == 'mortality':
+                # print("-------------------")
+                # print(y_all)
+                # print(pred_all)
+                # print("-------------------")
                 metric = metrics.roc_auc_score(y_all, pred_all)
             else:
                 correct = (pred_all == y_all).sum().item()
@@ -203,33 +211,69 @@ class BaseTrainer:
         print(f'\n=================================== Results (Eval-Fix) ===================================')
         print(f'Metric: {self.eval_metric}\n')
         timestamps = self.eval_dataset.ENV
-        metrics = []
+        metrics = [] 
+        error_list = []
         for i, timestamp in enumerate(timestamps):
-            if timestamp < self.split_time:
-                self.eval_dataset.mode = 1
-                self.eval_dataset.update_current_timestamp(timestamp)
-                self.eval_dataset.update_historical(i + 1, data_del=True)
-            elif timestamp == self.split_time:
-                self.eval_dataset.mode = 1
-                self.eval_dataset.update_current_timestamp(timestamp)
-                test_id_dataloader = FastDataLoader(dataset=self.eval_dataset,
-                                                    batch_size=self.mini_batch_size,
-                                                    num_workers=self.num_workers, collate_fn=self.eval_collate_fn)
-                id_metric = self.network_evaluation(test_id_dataloader)
-                print(f'ID {self.eval_metric}: \t{id_metric}\n')
-            else:
+            if self.train_type == 0: # origin
+                if timestamp < self.split_time:
+                    self.eval_dataset.mode = 1
+                    self.eval_dataset.update_current_timestamp(timestamp)
+                    self.eval_dataset.update_historical(i + 1, data_del=True)
+                elif timestamp == self.split_time:
+                    self.eval_dataset.mode = 1
+                    self.eval_dataset.update_current_timestamp(timestamp)
+                    test_id_dataloader = FastDataLoader(dataset=self.eval_dataset,
+                                                        batch_size=self.mini_batch_size,
+                                                        num_workers=self.num_workers, collate_fn=self.eval_collate_fn)
+                    id_metric = self.network_evaluation(test_id_dataloader)
+                    print(f'ID {self.eval_metric}: \t{id_metric}\n')
+                else:
+                    self.eval_dataset.mode = 2
+                    self.eval_dataset.update_current_timestamp(timestamp)
+                    test_ood_dataloader = FastDataLoader(dataset=self.eval_dataset,
+                                                        batch_size=self.mini_batch_size,
+                                                        num_workers=self.num_workers, collate_fn=self.eval_collate_fn)
+                    # print(len(self.eval_dataset))
+                    # print("-------------------------test")
+                    # print(len(test_ood_dataloader))
+                    # print("-------------------------test")
+                    acc = self.network_evaluation(test_ood_dataloader)
+                    print(f'OOD timestamp = {timestamp}: \t {self.eval_metric} is {acc}')
+                    metrics.append(acc)
+            elif self.train_type == 1: # HPO evaluate
+                from torch.utils.data import Subset
+                if timestamp <= self.split_time:
+                    self.eval_dataset.mode = 1
+                    self.eval_dataset.update_current_timestamp(timestamp)
+                    if timestamp in [1934,1939,1944,1949,1954,1959,1964,1969]:
+                        # self.eval_dataset.update_historical(i + 1)
+                        test_id_dataloader = FastDataLoader(dataset=self.eval_dataset,
+                                                            batch_size=self.mini_batch_size,
+                                                            num_workers=self.num_workers, collate_fn=self.eval_collate_fn)
+                        error  = 1 - self.network_evaluation(test_id_dataloader)
+                        error_list.append(error)
+                    else:
+                        self.eval_dataset.update_historical(i + 1)
+
+            else: # final evaluation
                 self.eval_dataset.mode = 2
                 self.eval_dataset.update_current_timestamp(timestamp)
-                test_ood_dataloader = FastDataLoader(dataset=self.eval_dataset,
-                                                     batch_size=self.mini_batch_size,
-                                                     num_workers=self.num_workers, collate_fn=self.eval_collate_fn)
-                acc = self.network_evaluation(test_ood_dataloader)
-                print(f'OOD timestamp = {timestamp}: \t {self.eval_metric} is {acc}')
-                metrics.append(acc)
-        print(f'\nOOD Average Metric: \t{np.mean(metrics)}'
-              f'\nOOD Worst Metric: \t{np.min(metrics)}'
-              f'\nAll OOD Metrics: \t{metrics}\n')
-
+                if timestamp >= self.split_time:
+                    if timestamp in [1974,1979,1984,1989,1994,1999,2004,2009,2013]:
+                        test_ood_dataloader = FastDataLoader(dataset=self.eval_dataset,
+                                                            batch_size=self.mini_batch_size,
+                                                            num_workers=self.num_workers, collate_fn=self.eval_collate_fn)
+                        acc = self.network_evaluation(test_ood_dataloader)
+                        error_list.append(1-acc)
+                    else:
+                        self.eval_dataset.update_historical(i + 1)
+        if self.train_type != 0:
+            return error_list
+        else:
+            print(f'\nOOD Average Metric: \t{np.mean(metrics)}'
+            f'\nOOD Worst Metric: \t{np.min(metrics)}'
+            f'\nAll OOD Metrics: \t{metrics}\n')
+                              
     def evaluate_offline_all_timestamps(self):
         print(f'\n=================================== Results (Eval-Fix) ===================================')
         timestamps = self.train_dataset.ENV
@@ -255,7 +299,7 @@ class BaseTrainer:
               f'\nWorst Metric Across All Timestamps: \t{np.min(metrics)}'
               f'\nMetrics Across All Timestamps: \t{metrics}\n')
 
-    def run_eval_fix(self):
+    def run_eval_fix(self): # check-im
         print('==========================================================================================')
         print("Running Eval-Fix...\n")
         if self.args.method in ['agem', 'ewc', 'ft', 'si']:
@@ -265,7 +309,10 @@ class BaseTrainer:
         if self.args.eval_all_timestamps:
             self.evaluate_offline_all_timestamps()
         else:
-            self.evaluate_offline()
+            if self.train_type == 0:
+                self.evaluate_offline()
+            else:
+                return self.evaluate_offline()
 
     def run_task_difficulty(self):
         print('==========================================================================================')
@@ -286,7 +333,6 @@ class BaseTrainer:
                 else:
                     self.train_step(train_id_dataloader)
                     self.save_model(timestamp)
-
         for i, timestamp in enumerate(timestamps):
             self.eval_dataset.mode = 1
             self.eval_dataset.update_current_timestamp(timestamp)
@@ -307,13 +353,16 @@ class BaseTrainer:
             self.train_online()
         self.evaluate_online()
 
-    def run(self):
+    def run(self): # check-im
         torch.cuda.empty_cache()
         start_time = time.time()
         if self.args.difficulty:
             self.run_task_difficulty()
         elif self.args.eval_fix:
-            self.run_eval_fix()
+            if self.train_type == 0:
+                self.run_eval_fix()
+            else:
+                return self.run_eval_fix()
         else:
             self.run_eval_stream()
         runtime = time.time() - start_time
@@ -335,3 +384,4 @@ class BaseTrainer:
     def load_model(self, timestamp):
         path = self.get_model_path(timestamp)
         self.network.load_state_dict(torch.load(path), strict=False)
+# python test.py --hpo_method CFO --train_type 1 --robust_method erm --seed 1 --device 0 --budget 10800

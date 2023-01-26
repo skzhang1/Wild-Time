@@ -303,10 +303,8 @@ def preprocess(args):
 enc_protein = OneHotEncoder().fit(np.array(amino_char).reshape(-1, 1))
 enc_drug = OneHotEncoder().fit(np.array(smiles_char).reshape(-1, 1))
 
-
 def protein_2_embed(x):
     return enc_protein.transform(np.array(x).reshape(-1, 1)).toarray().T
-
 
 def drug_2_embed(x):
     return enc_drug.transform(np.array(x).reshape(-1, 1)).toarray().T

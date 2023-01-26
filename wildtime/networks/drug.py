@@ -112,7 +112,6 @@ class DTI_Encoder(nn.Sequential):
             v_f = l(v_f)
         return v_f
 
-
 def DTI_Classifier(in_features, out_features, is_nonlinear=False):
     if is_nonlinear:
         return torch.nn.Sequential(

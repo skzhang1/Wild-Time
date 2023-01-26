@@ -139,6 +139,9 @@ def get_collate_functions(args, train_dataset):
     return train_collate_fn, eval_collate_fn
 
 def collate_fn_mimic(batch):
+    # print("-------------------------------------------")
+    # print(batch)
+    # print("-------------------------------------------")
     codes = [item[0][0] for item in batch]
     types = [item[0][1] for item in batch]
     target = [item[1] for item in batch]

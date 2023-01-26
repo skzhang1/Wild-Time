@@ -25,7 +25,6 @@ scheduler = None
 group_datasets = ['coral', 'groupdro', 'irm']
 print = partial(print, flush=True)
 
-
 def _yearbook_init(args):
     if args.method in group_datasets:
         from .data.yearbook import YearbookGroup
@@ -72,7 +71,7 @@ def _drug_init(args):
     network = nn.Sequential(featurizer, classifier).cuda()
     optimizer = torch.optim.Adam(network.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     return dataset, criterion, network, optimizer, scheduler
-
+    
 def _mimic_init(args):
     if args.method in group_datasets:
         from .data.mimic import MIMICGroup
@@ -146,4 +145,7 @@ def init(args):
 
 def train(args):
     trainer = init(args)
-    trainer.run()
+    if args.train_type == 0:
+        trainer.run()
+    else:
+        return trainer.run()

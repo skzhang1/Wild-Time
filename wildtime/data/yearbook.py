@@ -179,6 +179,12 @@ class YearbookBase(Dataset):
     def update_historical(self, idx, data_del=False):
         time = self.ENV[idx]
         prev_time = self.ENV[idx - 1]
+        # print(idx,time)
+        # print("---------------------------------------")
+        # print(time,prev_time)
+        # print(len(self.datasets[time][self.mode]['images']))
+        # print(len(self.datasets[prev_time][self.mode]['images']))
+        # print("---------------------------------------")
         self.datasets[time][self.mode]['images'] = np.concatenate(
             (self.datasets[time][self.mode]['images'], self.datasets[prev_time][self.mode]['images']), axis=0)
         self.datasets[time][self.mode]['labels'] = np.concatenate(
@@ -231,6 +237,8 @@ class YearbookBase(Dataset):
 class Yearbook(YearbookBase):
     def __init__(self, args):
         super().__init__(args=args)
+        # mode = 2
+        # print(len(self.datasets[1930][mode]['images'])+len(self.datasets[1931][mode]['images'])+len(self.datasets[1932][mode]['images'])+len(self.datasets[1933][mode]['images'])+len(self.datasets[1934][mode]['images']))
 
     def __getitem__(self, index):
         if self.args.difficulty and self.mode == 0:

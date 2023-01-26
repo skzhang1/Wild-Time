@@ -52,7 +52,7 @@ class FastDataLoader:
 
     def __init__(self, dataset, batch_size, num_workers, collate_fn=None):
         super().__init__()
-
+        print(num_workers)
         batch_sampler = torch.utils.data.BatchSampler(
             torch.utils.data.RandomSampler(dataset, replacement=False),
             batch_size=min(batch_size, len(dataset)),
